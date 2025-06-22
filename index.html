@@ -6,7 +6,6 @@
     <title>OmniShare - Secure File Sharing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -751,7 +750,6 @@
                 <div class="user-actions">
                     <button class="btn btn-outline" id="loginBtn">Login</button>
                     <button class="btn btn-primary" id="signupBtn">Sign Up</button>
-                    <button class="btn btn-outline hidden" id="logoutBtn">Logout</button>
                 </div>
             </div>
         </header>
@@ -845,7 +843,7 @@
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="stat-info">
-                            <h3 id="userCount">0</h3>
+                            <h3>58,962</h3>
                             <p>Active Users</p>
                         </div>
                     </div>
@@ -920,9 +918,6 @@
         <footer>
             <p>OmniShare - Secure File Sharing Platform</p>
             <p>© 2023 OmniShare. All rights reserved.</p>
-            <p id="dbStatus" style="margin-top: 10px; font-size: 0.8rem; color: var(--success);">
-                <i class="fas fa-circle"></i> Database: Connecting...
-            </p>
         </footer>
     </div>
 
@@ -993,11 +988,15 @@
     </div>
 
     <script>
-        // Supabase initialization
-        const SUPABASE_URL = 'https://iwxqdyyevgzgsrkxbcrb.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFkeXlldmd6Z3Nya3hiY3JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1OTE1NjQsImV4cCI6MjA2NjE2NzU2NH0.4FwS5IvD92L2mvCbRu1TJoZBIOsRkft5UaKCJLncD-8';
-        
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Generate a random file ID (6-digit alphanumeric)
+        function generateFileId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let id = '';
+            for (let i = 0; i < 6; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
         
         // Format file size
         function formatFileSize(bytes) {
@@ -1009,8 +1008,7 @@
         }
         
         // Format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
+        function formatDate(date) {
             return date.toLocaleDateString('en-US', { 
                 month: 'short', 
                 day: 'numeric', 
@@ -1024,14 +1022,13 @@
             
             const date = new Date();
             date.setDate(date.getDate() + days);
-            return date.toISOString();
+            return date;
         }
         
         // Check if a date is expired
-        function isExpired(dateString) {
-            if (!dateString) return false; // Never expires
-            const expiryDate = new Date(dateString);
-            return new Date() > expiryDate;
+        function isExpired(date) {
+            if (!date) return false; // Never expires
+            return new Date() > date;
         }
         
         // Get expiration status
@@ -1039,8 +1036,7 @@
             if (!expiryDate) return {text: "Never expires", class: "active"};
             
             const today = new Date();
-            const expiry = new Date(expiryDate);
-            const diffTime = expiry - today;
+            const diffTime = expiryDate - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
             if (diffDays < 0) {
@@ -1057,46 +1053,52 @@
         let selectedExpirationDays = 7;
         let currentHistoryType = 'uploaded';
         let currentUser = null;
+        let users = {};
+        let fileHistory = {};
 
+        // Initialize data
+        function initializeData() {
+            // Check if data exists in localStorage
+            if (localStorage.getItem('omniUsers')) {
+                users = JSON.parse(localStorage.getItem('omniUsers'));
+            }
+            
+            if (localStorage.getItem('omniFiles')) {
+                fileHistory = JSON.parse(localStorage.getItem('omniFiles'));
+            }
+            
+            // If no files, create empty structure
+            if (!fileHistory.uploads) fileHistory.uploads = {};
+            if (!fileHistory.downloads) fileHistory.downloads = {};
+            
+            updateStats();
+        }
+        
         // Update stats
-        async function updateStats() {
+        function updateStats() {
             if (currentUser) {
-                // Get user upload count
-                const { count: uploadCount } = await supabase
-                    .from('files')
-                    .select('*', { count: 'exact' })
-                    .eq('user_id', currentUser.id);
+                const userUploads = fileHistory.uploads[currentUser] || [];
+                const userDownloads = fileHistory.downloads[currentUser] || [];
                 
-                // Get user download count
-                const { count: downloadCount } = await supabase
-                    .from('downloads')
-                    .select('*', { count: 'exact' })
-                    .eq('user_id', currentUser.id);
-                
-                // Get total user count
-                const { count: userCount } = await supabase
-                    .from('profiles')
-                    .select('*', { count: 'exact' });
-                
-                document.getElementById('uploadCount').textContent = uploadCount;
-                document.getElementById('downloadCount').textContent = downloadCount;
-                document.getElementById('userCount').textContent = userCount;
+                document.getElementById('uploadCount').textContent = userUploads.length;
+                document.getElementById('downloadCount').textContent = userDownloads.length;
             }
         }
         
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('omniUsers', JSON.stringify(users));
+            localStorage.setItem('omniFiles', JSON.stringify(fileHistory));
+        }
+        
         // Set current user
-        function setCurrentUser(user) {
-            currentUser = user;
+        function setCurrentUser(email) {
+            currentUser = email;
             
             // Update UI
-            const name = user.user_metadata?.full_name || user.email;
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            const name = users[email].name;
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
             document.getElementById('userAvatar').textContent = initials;
-            
-            // Show logout button
-            document.getElementById('logoutBtn').classList.remove('hidden');
-            document.getElementById('loginBtn').classList.add('hidden');
-            document.getElementById('signupBtn').classList.add('hidden');
             
             // Update stats
             updateStats();
@@ -1174,7 +1176,7 @@
         }
 
         // Render file history
-        async function renderFileHistory(type) {
+        function renderFileHistory(type) {
             const historyList = document.getElementById('historyList');
             historyList.innerHTML = '';
             
@@ -1190,27 +1192,10 @@
             }
             
             let files = [];
-            
-            try {
-                if (type === 'uploaded') {
-                    const { data, error } = await supabase
-                        .from('files')
-                        .select('*')
-                        .eq('user_id', currentUser.id)
-                        .order('created_at', { ascending: false });
-                    
-                    if (data) files = data;
-                } else {
-                    const { data, error } = await supabase
-                        .from('downloads')
-                        .select('files(*)')
-                        .eq('user_id', currentUser.id)
-                        .order('downloaded_at', { ascending: false });
-                    
-                    if (data) files = data.map(d => d.files);
-                }
-            } catch (error) {
-                showNotification('Error loading history: ' + error.message, false);
+            if (type === 'uploaded') {
+                files = fileHistory.uploads[currentUser] || [];
+            } else {
+                files = fileHistory.downloads[currentUser] || [];
             }
             
             if (files.length === 0) {
@@ -1229,14 +1214,12 @@
                 historyItem.className = 'history-item';
                 
                 let fileIcon;
-                const fileType = file.file_name.split('.').pop().toLowerCase();
-                switch(fileType) {
+                switch(file.type) {
                     case 'pdf': fileIcon = 'fa-file-pdf'; break;
-                    case 'doc': case 'docx': fileIcon = 'fa-file-word'; break;
-                    case 'xls': case 'xlsx': fileIcon = 'fa-file-excel'; break;
-                    case 'ppt': case 'pptx': fileIcon = 'fa-file-powerpoint'; break;
-                    case 'zip': case 'rar': fileIcon = 'fa-file-archive'; break;
-                    case 'jpg': case 'jpeg': fileIcon = 'fa-file-image'; break;
+                    case 'doc': fileIcon = 'fa-file-word'; break;
+                    case 'xls': fileIcon = 'fa-file-excel'; break;
+                    case 'ppt': fileIcon = 'fa-file-powerpoint'; break;
+                    case 'zip': fileIcon = 'fa-file-archive'; break;
                     default: fileIcon = 'fa-file';
                 }
                 
@@ -1244,11 +1227,11 @@
                 let expirationInfo = '';
                 let expirationBadge = '';
                 
-                if (type === 'uploaded' && file.expires_at) {
-                    const status = getExpirationStatus(file.expires_at);
-                    expirationInfo = `<div>Expires: ${formatDate(file.expires_at)}</div>`;
+                if (type === 'uploaded' && file.expiryDate) {
+                    const status = getExpirationStatus(new Date(file.expiryDate));
+                    expirationInfo = `<div>Expires: ${formatDate(new Date(file.expiryDate))}</div>`;
                     expirationBadge = `<div class="expiration-badge ${status.class}">${status.text}</div>`;
-                } else if (type === 'uploaded' && !file.expires_at) {
+                } else if (type === 'uploaded' && !file.expiryDate) {
                     expirationBadge = `<div class="expiration-badge active">Never expires</div>`;
                 }
                 
@@ -1259,200 +1242,94 @@
                         </div>
                         <div class="file-info">
                             <div class="file-name">
-                                ${file.file_name}
+                                ${file.name}
                             </div>
-                            <div class="file-id">ID: ${file.file_id}</div>
+                            <div class="file-id">ID: ${file.id}</div>
                             <div class="status ${type === 'uploaded' ? 'upload' : 'download'}">${type === 'uploaded' ? 'Uploaded' : 'Downloaded'}</div>
                         </div>
                     </div>
                     <div class="file-meta">
-                        <div>Size: ${formatFileSize(file.file_size)}</div>
-                        <div>Date: ${formatDate(type === 'uploaded' ? file.created_at : file.downloaded_at)}</div>
+                        <div>Size: ${formatFileSize(file.size)}</div>
+                        <div>Date: ${formatDate(new Date(file.date))}</div>
                         ${expirationInfo}
                     </div>
                     ${expirationBadge}
                     <div class="file-actions">
-                        <button class="action-btn download-history" data-id="${file.file_id}"><i class="fas fa-download"></i> Download</button>
-                        <button class="action-btn copy-id" data-id="${file.file_id}"><i class="fas fa-copy"></i> Copy ID</button>
-                        ${type === 'uploaded' ? `<button class="action-btn delete-file" data-id="${file.id}"><i class="fas fa-trash-alt"></i> Delete</button>` : ''}
+                        <button class="action-btn"><i class="fas fa-download"></i> Download</button>
+                        <button class="action-btn"><i class="fas fa-copy"></i> Copy ID</button>
+                        ${type === 'uploaded' ? '<button class="action-btn"><i class="fas fa-trash-alt"></i> Delete</button>' : ''}
                     </div>
                 `;
                 
                 historyList.appendChild(historyItem);
             });
-            
-            // Add event listeners for new buttons
-            document.querySelectorAll('.download-history').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const fileId = btn.getAttribute('data-id');
-                    downloadFile(fileId);
-                });
-            });
-            
-            document.querySelectorAll('.copy-id').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const fileId = btn.getAttribute('data-id');
-                    navigator.clipboard.writeText(fileId);
-                    showNotification('File ID copied to clipboard');
-                });
-            });
-            
-            document.querySelectorAll('.delete-file').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const fileId = btn.getAttribute('data-id');
-                    try {
-                        const { error } = await supabase
-                            .from('files')
-                            .delete()
-                            .eq('id', fileId);
-                        
-                        if (!error) {
-                            showNotification('File deleted successfully');
-                            renderFileHistory(currentHistoryType);
-                        } else {
-                            showNotification('Error deleting file: ' + error.message, false);
-                        }
-                    } catch (error) {
-                        showNotification('Error deleting file: ' + error.message, false);
-                    }
-                });
-            });
         }
 
-        // Upload file to Supabase
-        async function uploadFile(file, expirationDays) {
+        // Simulate file upload
+        function uploadFile(file, expirationDays) {
             const progressBar = document.getElementById('uploadProgress');
             let progress = 0;
             
-            // Generate file ID
-            const fileId = generateFileId();
-            
-            // Calculate expiration date
-            const expiresAt = expirationDays > 0 ? calculateExpirationDate(expirationDays) : null;
-            
-            // Upload file to storage
-            try {
-                // First upload metadata to database
-                const { data, error } = await supabase
-                    .from('files')
-                    .insert([{
-                        file_id: fileId,
-                        file_name: file.name,
-                        file_type: file.type,
-                        file_size: file.size,
-                        expires_at: expiresAt,
-                        user_id: currentUser.id
-                    }]);
-                
-                if (error) throw error;
-                
-                showNotification('File uploaded successfully!');
-                
-                // Reset UI
-                document.getElementById('filePreview').classList.add('hidden');
-                document.getElementById('dropArea').classList.remove('hidden');
-                progressBar.style.width = '0%';
-                
-                // Update stats and history
-                updateStats();
-                if (document.getElementById('historyView').classList.contains('hidden') === false) {
-                    renderFileHistory(currentHistoryType);
+            const uploadInterval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(uploadInterval);
+                    
+                    // Generate file ID
+                    const fileId = generateFileId();
+                    
+                    // Calculate expiration date
+                    const expiryDate = expirationDays > 0 ? calculateExpirationDate(expirationDays) : null;
+                    
+                    // Create file object
+                    const fileObj = {
+                        id: fileId,
+                        name: file.name,
+                        type: file.name.split('.').pop(),
+                        size: file.size,
+                        date: new Date(),
+                        expiryDate: expiryDate,
+                        owner: currentUser
+                    };
+                    
+                    // Add to history
+                    if (!fileHistory.uploads[currentUser]) {
+                        fileHistory.uploads[currentUser] = [];
+                    }
+                    fileHistory.uploads[currentUser].unshift(fileObj);
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Update stats
+                    updateStats();
+                    
+                    // Show notification
+                    showNotification('File uploaded successfully!');
+                    
+                    // Reset UI
+                    document.getElementById('filePreview').classList.add('hidden');
+                    document.getElementById('dropArea').classList.remove('hidden');
+                    progressBar.style.width = '0%';
+                    
+                    // Update history if we're on that view
+                    if (document.getElementById('historyView').classList.contains('hidden') === false) {
+                        renderFileHistory(currentHistoryType);
+                    }
+                    
+                    // Show file ID to user
+                    showNotification(`Your file ID: ${fileId}`, true);
                 }
                 
-                // Show file ID to user
-                showNotification(`Your file ID: ${fileId}`, true);
-            } catch (error) {
-                showNotification('Upload failed: ' + error.message, false);
-                progressBar.style.width = '0%';
-            }
-        }
-
-        // Download file
-        async function downloadFile(fileId) {
-            if (!currentUser) {
-                showNotification('Please log in to download files', false);
-                return;
-            }
-            
-            try {
-                // Get file metadata
-                const { data: files, error } = await supabase
-                    .from('files')
-                    .select('*')
-                    .eq('file_id', fileId);
-                
-                if (error || !files || files.length === 0) {
-                    showNotification('File not found', false);
-                    return;
-                }
-                
-                const file = files[0];
-                
-                // Check if file is expired
-                if (file.expires_at && isExpired(file.expires_at)) {
-                    showNotification('This file has expired', false);
-                    return;
-                }
-                
-                // Record download in database
-                await supabase
-                    .from('downloads')
-                    .insert([{
-                        file_id: file.id,
-                        user_id: currentUser.id,
-                        downloaded_at: new Date().toISOString()
-                    }]);
-                
-                // Update stats
-                updateStats();
-                
-                // For demo, we'll just show a notification
-                showNotification(`Download started for: ${file.file_name}`);
-                
-                // In a real app, you would serve the file from storage
-                // const { data, error: downloadError } = await supabase.storage
-                //   .from('files')
-                //   .download(file.file_path);
-                
-            } catch (error) {
-                showNotification('Download failed: ' + error.message, false);
-            }
-        }
-
-        // Generate file ID
-        function generateFileId() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let id = '';
-            for (let i = 0; i < 6; i++) {
-                id += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return id;
+                progressBar.style.width = `${progress}%`;
+            }, 200);
         }
 
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Update DB status
-            document.getElementById('dbStatus').innerHTML = '<i class="fas fa-circle"></i> Database: Connecting to Supabase...';
-            
-            try {
-                // Check Supabase connection
-                const { data, error } = await supabase
-                    .from('files')
-                    .select('*')
-                    .limit(1);
-                
-                if (!error) {
-                    document.getElementById('dbStatus').innerHTML = '<i class="fas fa-circle" style="color: var(--success);"></i> Database: Connected to Supabase';
-                } else {
-                    document.getElementById('dbStatus').innerHTML = '<i class="fas fa-circle" style="color: var(--danger);"></i> Database: Connection Error';
-                }
-            } catch (error) {
-                document.getElementById('dbStatus').innerHTML = '<i class="fas fa-circle" style="color: var(--danger);"></i> Database: Connection Error';
-            }
-            
-            // Check if user is already logged in
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) setCurrentUser(user);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize data
+            initializeData();
             
             // Navigation
             document.querySelectorAll('nav a').forEach(link => {
@@ -1484,21 +1361,8 @@
                 openModal('signupModal');
             });
             
-            // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', async () => {
-                const { error } = await supabase.auth.signOut();
-                if (!error) {
-                    currentUser = null;
-                    document.getElementById('logoutBtn').classList.add('hidden');
-                    document.getElementById('loginBtn').classList.remove('hidden');
-                    document.getElementById('signupBtn').classList.remove('hidden');
-                    document.getElementById('userAvatar').textContent = 'GU';
-                    showNotification('You have been logged out');
-                }
-            });
-            
             // Login submit
-            document.getElementById('loginSubmit').addEventListener('click', async () => {
+            document.getElementById('loginSubmit').addEventListener('click', () => {
                 const email = document.getElementById('loginEmail').value.trim();
                 const password = document.getElementById('loginPassword').value.trim();
                 
@@ -1507,24 +1371,17 @@
                     return;
                 }
                 
-                try {
-                    const { data, error } = await supabase.auth.signInWithPassword({
-                        email: email,
-                        password: password
-                    });
-                    
-                    if (error) throw error;
-                    
-                    setCurrentUser(data.user);
+                if (users[email] && users[email].password === password) {
+                    setCurrentUser(email);
                     closeAllModals();
                     showNotification('Login successful!');
-                } catch (error) {
-                    showNotification('Login failed: ' + error.message, false);
+                } else {
+                    showNotification('Invalid email or password', false);
                 }
             });
             
             // Signup submit
-            document.getElementById('signupSubmit').addEventListener('click', async () => {
+            document.getElementById('signupSubmit').addEventListener('click', () => {
                 const name = document.getElementById('signupName').value.trim();
                 const email = document.getElementById('signupEmail').value.trim();
                 const password = document.getElementById('signupPassword').value;
@@ -1540,34 +1397,26 @@
                     return;
                 }
                 
-                try {
-                    const { data, error } = await supabase.auth.signUp({
-                        email: email,
-                        password: password,
-                        options: {
-                            data: {
-                                full_name: name
-                            }
-                        }
-                    });
-                    
-                    if (error) throw error;
-                    
-                    // Create user profile
-                    await supabase
-                        .from('profiles')
-                        .insert([{
-                            id: data.user.id,
-                            email: email,
-                            full_name: name
-                        }]);
-                    
-                    setCurrentUser(data.user);
-                    closeAllModals();
-                    showNotification('Account created successfully! Please check your email to confirm your account.');
-                } catch (error) {
-                    showNotification('Signup failed: ' + error.message, false);
+                if (users[email]) {
+                    showNotification('Email already registered', false);
+                    return;
                 }
+                
+                // Create user
+                users[email] = {
+                    name: name,
+                    email: email,
+                    password: password
+                };
+                
+                // Save data
+                saveData();
+                
+                // Set as current user
+                setCurrentUser(email);
+                
+                closeAllModals();
+                showNotification('Account created successfully!');
             });
             
             // Close modals
@@ -1701,48 +1550,97 @@
             
             // Download file
             document.getElementById('downloadBtn').addEventListener('click', () => {
+                if (!currentUser) {
+                    showNotification('Please log in to download files', false);
+                    return;
+                }
+                
                 const fileId = document.getElementById('fileIdInput').value.trim();
                 if (!fileId) {
                     showNotification('Please enter a file ID', false);
                     return;
                 }
                 
-                downloadFile(fileId);
+                // Find file in any user's uploads
+                let file = null;
+                for (const user in fileHistory.uploads) {
+                    const found = fileHistory.uploads[user].find(f => f.id === fileId);
+                    if (found) {
+                        file = found;
+                        break;
+                    }
+                }
+                
+                if (file) {
+                    if (file.expiryDate && isExpired(new Date(file.expiryDate))) {
+                        showNotification('This file has expired', false);
+                    } else {
+                        // Simulate download
+                        showNotification('File download started');
+                        
+                        // Add to download history
+                        if (!fileHistory.downloads[currentUser]) {
+                            fileHistory.downloads[currentUser] = [];
+                        }
+                        
+                        // Create a copy for download history
+                        const downloadRecord = {
+                            id: file.id,
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            date: new Date(),
+                            originalOwner: file.owner
+                        };
+                        
+                        fileHistory.downloads[currentUser].unshift(downloadRecord);
+                        
+                        // Save data
+                        saveData();
+                        
+                        // Update stats
+                        updateStats();
+                        
+                        // Update history
+                        if (!document.getElementById('historyView').classList.contains('hidden')) {
+                            renderFileHistory(currentHistoryType);
+                        }
+                    }
+                } else {
+                    showNotification('File not found', false);
+                }
             });
             
             // Check file info
-            document.getElementById('checkFileBtn').addEventListener('click', async () => {
+            document.getElementById('checkFileBtn').addEventListener('click', () => {
                 const fileId = document.getElementById('checkFileId').value.trim();
                 if (!fileId) {
                     showNotification('Please enter a file ID', false);
                     return;
                 }
                 
-                try {
-                    const { data: files, error } = await supabase
-                        .from('files')
-                        .select('*')
-                        .eq('file_id', fileId);
-                    
-                    const fileInfoCard = document.getElementById('fileInfoCard');
-                    
-                    if (error || !files || files.length === 0) {
-                        showNotification('File not found', false);
-                        fileInfoCard.classList.add('hidden');
-                        return;
+                // Find file in any user's uploads
+                let file = null;
+                for (const user in fileHistory.uploads) {
+                    const found = fileHistory.uploads[user].find(f => f.id === fileId);
+                    if (found) {
+                        file = found;
+                        break;
                     }
-                    
-                    const file = files[0];
-                    
+                }
+                
+                const fileInfoCard = document.getElementById('fileInfoCard');
+                
+                if (file) {
                     // Update file info
-                    document.getElementById('infoFileName').textContent = file.file_name;
-                    document.getElementById('infoFileId').textContent = file.file_id;
-                    document.getElementById('infoFileSize').textContent = formatFileSize(file.file_size);
-                    document.getElementById('infoUploadDate').textContent = formatDate(file.created_at);
+                    document.getElementById('infoFileName').textContent = file.name;
+                    document.getElementById('infoFileId').textContent = file.id;
+                    document.getElementById('infoFileSize').textContent = formatFileSize(file.size);
+                    document.getElementById('infoUploadDate').textContent = formatDate(new Date(file.date));
                     
-                    if (file.expires_at) {
-                        const status = getExpirationStatus(file.expires_at);
-                        document.getElementById('infoExpiryDate').textContent = formatDate(file.expires_at);
+                    if (file.expiryDate) {
+                        const status = getExpirationStatus(new Date(file.expiryDate));
+                        document.getElementById('infoExpiryDate').textContent = formatDate(new Date(file.expiryDate));
                         document.getElementById('infoFileStatus').textContent = status.text;
                         document.getElementById('infoFileStatus').className = `status ${status.class}`;
                     } else {
@@ -1753,8 +1651,9 @@
                     
                     // Show file info card
                     fileInfoCard.classList.remove('hidden');
-                } catch (error) {
-                    showNotification('Error fetching file info: ' + error.message, false);
+                } else {
+                    showNotification('File not found', false);
+                    fileInfoCard.classList.add('hidden');
                 }
             });
         });
