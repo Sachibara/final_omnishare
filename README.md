@@ -54,7 +54,7 @@ http://localhost:8000
 A public copy of my developer portfolio is also stored in:
 
 ```text
-portfolio/index.html
+portfolio-v2/index.html
 ```
 
 ## Developer
