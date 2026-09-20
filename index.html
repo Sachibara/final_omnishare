@@ -1,1662 +1,362 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniShare - Secure File Sharing</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #eef2ff;
-            --secondary: #7209b7;
-            --success: #4cc9f0;
-            --danger: #e63946;
-            --warning: #f8961e;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --border: #dee2e6;
-            --card-shadow: 0 6px 16px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f0f4ff 0%, #d9e0ff 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--dark);
-            position: relative;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .logo i {
-            font-size: 32px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 8px;
-            background: white;
-            padding: 8px;
-            border-radius: 50px;
-            box-shadow: var(--card-shadow);
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: var(--gray);
-            font-weight: 500;
-            padding: 12px 28px;
-            border-radius: 30px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-        }
-        
-        nav a:hover, nav a.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .user-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 15px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            padding: 35px;
-            margin-bottom: 35px;
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .main-card {
-            text-align: center;
-            padding: 50px 40px;
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-        
-        h2 {
-            font-size: 2.0rem;
-            margin-bottom: 25px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 18px;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-        
-        .drop-area {
-            border: 3px dashed var(--border);
-            border-radius: 20px;
-            padding: 70px 40px;
-            margin: 35px 0;
-            background: var(--light);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        
-        .drop-area:hover, .drop-area.drag-over {
-            border-color: var(--primary);
-            background: rgba(67, 97, 238, 0.05);
-            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.1);
-        }
-        
-        .drop-area i {
-            font-size: 72px;
-            color: var(--primary);
-            margin-bottom: 25px;
-        }
-        
-        .file-types {
-            color: var(--gray);
-            margin-top: 25px;
-            font-size: 1rem;
-        }
-        
-        .or-divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-        }
-        
-        .or-divider span {
-            padding: 0 20px;
-            color: var(--gray);
-            font-size: 16px;
-        }
-        
-        .or-divider::before, .or-divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-        
-        .form-group {
-            margin-bottom: 28px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-            color: var(--dark);
-            font-size: 16px;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 16px 24px;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            font-size: 16px;
-            transition: var(--transition);
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.2);
-        }
-        
-        .expiration-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 18px;
-            margin: 30px 0;
-        }
-        
-        .expiration-option {
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 20px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .expiration-option:hover {
-            border-color: var(--primary);
-            background: rgba(67, 97, 238, 0.05);
-        }
-        
-        .expiration-option.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.2);
-        }
-        
-        .expiration-option i {
-            font-size: 28px;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-        
-        .history-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        
-        .history-tab {
-            padding: 12px 24px;
-            background: var(--light);
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            font-size: 15px;
-        }
-        
-        .history-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .history-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 25px;
-        }
-        
-        .history-item {
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            transition: var(--transition);
-            background: white;
-            position: relative;
-        }
-        
-        .history-item:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--card-shadow);
-            border-color: var(--primary);
-        }
-        
-        .file-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(67, 97, 238, 0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: var(--primary);
-        }
-        
-        .file-info {
-            flex: 1;
-        }
-        
-        .file-name {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--dark);
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .file-meta {
-            font-size: 15px;
-            color: var(--gray);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        
-        .file-id {
-            background: var(--light);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-family: monospace;
-            font-size: 15px;
-            display: inline-block;
-            margin-top: 8px;
-        }
-        
-        .status {
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            margin-top: 8px;
-        }
-        
-        .status.upload {
-            background: rgba(76, 201, 240, 0.15);
-            color: #189ab4;
-        }
-        
-        .status.download {
-            background: rgba(114, 9, 183, 0.15);
-            color: var(--secondary);
-        }
-        
-        .expired {
-            background: rgba(230, 57, 70, 0.15);
-            color: var(--danger);
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 35px 0;
-            color: var(--gray);
-            font-size: 15px;
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-        }
-        
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-        
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 520px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-            transform: translateY(-20px);
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            opacity: 0;
-        }
-        
-        .modal.active .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .modal-header {
-            padding: 28px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            margin-bottom: 0;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            color: var(--gray);
-            transition: var(--transition);
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-        
-        .close-modal:hover {
-            background: var(--light-gray);
-            color: var(--dark);
-        }
-        
-        .modal-body {
-            padding: 35px;
-        }
-        
-        .switch-form {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 15px;
-        }
-        
-        .switch-form a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .switch-form a:hover {
-            text-decoration: underline;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            padding: 18px 30px;
-            border-radius: 14px;
-            background: white;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateX(120%);
-            transition: transform 0.4s ease;
-            z-index: 1000;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification.success {
-            border-left: 4px solid var(--success);
-        }
-        
-        .notification.error {
-            border-left: 4px solid #e63946;
-        }
-        
-        .progress-bar {
-            height: 6px;
-            background: rgba(67, 97, 238, 0.2);
-            border-radius: 4px;
-            margin-top: 18px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .file-preview {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: var(--primary-light);
-            border-radius: 16px;
-            margin-bottom: 25px;
-        }
-        
-        .file-preview-info {
-            flex: 1;
-        }
-        
-        .expiration-badge {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .expiration-badge.active {
-            background: rgba(76, 201, 240, 0.15);
-            color: #189ab4;
-        }
-        
-        .expiration-badge.expired {
-            background: rgba(230, 57, 70, 0.15);
-            color: var(--danger);
-        }
-        
-        .expiration-badge.warning {
-            background: rgba(248, 150, 30, 0.15);
-            color: var(--warning);
-        }
-        
-        .file-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .action-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            background: var(--light);
-            color: var(--dark);
-        }
-        
-        .action-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .stat-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        
-        .stat-info h3 {
-            margin-bottom: 5px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-        
-        .stat-info p {
-            color: var(--gray);
-            font-size: 15px;
-        }
-        
-        .user-info-panel {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 20px;
-            background: var(--primary-light);
-            border-radius: 50px;
-        }
-        
-        @media (max-width: 900px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            nav ul {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .history-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .drop-area {
-                padding: 50px 30px;
-            }
-            
-            .expiration-options {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            nav a {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-            
-            .btn {
-                padding: 10px 18px;
-                font-size: 14px;
-            }
-            
-            .main-card {
-                padding: 35px 25px;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            h2 {
-                font-size: 1.7rem;
-            }
-            
-            .stat-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OmniShare — a local-first, privacy-focused file sharing workspace with real browser storage and downloads.">
+  <meta name="theme-color" content="#07111f">
+  <title>OmniShare — Local-first File Sharing</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <span>OmniShare</span>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" class="active" data-view="upload"><i class="fas fa-upload"></i> Upload</a></li>
-                    <li><a href="#" data-view="download"><i class="fas fa-download"></i> Download</a></li>
-                    <li><a href="#" data-view="history"><i class="fas fa-history"></i> History</a></li>
-                </ul>
-            </nav>
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">GU</div>
-                <div class="user-actions">
-                    <button class="btn btn-outline" id="loginBtn">Login</button>
-                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
-                </div>
-            </div>
-        </header>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-        <main>
-            <!-- Upload View -->
-            <section id="uploadView" class="view">
-                <div class="card main-card">
-                    <h1>Share Files with OmniShare</h1>
-                    <p class="file-types">Upload files and share them with anyone, anywhere</p>
-                    
-                    <div class="drop-area" id="dropArea">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <h3>Drag & Drop Files Here</h3>
-                        <div class="or-divider">
-                            <span>or</span>
-                        </div>
-                        <button class="btn btn-primary" id="browseBtn">
-                            <i class="fas fa-folder-open"></i> Browse Files
-                        </button>
-                        <div class="file-types">
-                            Supports PDF, DOC, XLS, JPG, PNG, MP4, ZIP and more
-                        </div>
-                    </div>
-                    
-                    <div id="filePreview" class="hidden">
-                        <div class="file-preview">
-                            <div class="file-icon">
-                                <i class="fas fa-file"></i>
-                            </div>
-                            <div class="file-preview-info">
-                                <div class="file-name" id="previewFileName"></div>
-                                <div class="file-meta">
-                                    <span id="previewFileSize"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3>Set Expiration</h3>
-                        <div class="expiration-options">
-                            <div class="expiration-option" data-days="1">
-                                <i class="fas fa-bolt"></i>
-                                <div>1 Day</div>
-                            </div>
-                            <div class="expiration-option selected" data-days="7">
-                                <i class="fas fa-calendar-week"></i>
-                                <div>7 Days</div>
-                            </div>
-                            <div class="expiration-option" data-days="30">
-                                <i class="fas fa-calendar-alt"></i>
-                                <div>30 Days</div>
-                            </div>
-                            <div class="expiration-option" data-days="0">
-                                <i class="fas fa-infinity"></i>
-                                <div>Never</div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-bar">
-                            <div class="progress" id="uploadProgress"></div>
-                        </div>
-                        
-                        <div class="buttons" style="display: flex; gap: 12px; margin-top: 25px;">
-                            <button class="btn btn-outline" id="cancelUpload">Cancel</button>
-                            <button class="btn btn-primary" id="confirmUpload">Upload File</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-upload"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="uploadCount">0</h3>
-                            <p>Files Uploaded</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="downloadCount">0</h3>
-                            <p>Files Downloaded</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>58,962</h3>
-                            <p>Active Users</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Download View -->
-            <section id="downloadView" class="view hidden">
-                <div class="card">
-                    <h2>Download Files</h2>
-                    <div class="form-group">
-                        <label>File Link or ID</label>
-                        <input type="text" class="form-control" id="fileIdInput" placeholder="Paste file link or ID here">
-                    </div>
-                    <button class="btn btn-primary" id="downloadBtn">
-                        <i class="fas fa-download"></i> Download File
-                    </button>
-                    
-                    <div class="or-divider">
-                        <span>or</span>
-                    </div>
-                    
-                    <h3>Check File Information</h3>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="checkFileId" placeholder="Enter file ID to check">
-                    </div>
-                    <button class="btn btn-outline" id="checkFileBtn">
-                        <i class="fas fa-search"></i> Check File
-                    </button>
-                    
-                    <div id="fileInfoCard" class="card hidden" style="margin-top: 30px;">
-                        <div class="file-info">
-                            <div class="file-name">
-                                <i class="fas fa-file-pdf"></i>
-                                <span id="infoFileName">Annual_Report.pdf</span>
-                            </div>
-                            <div class="file-meta">
-                                <div>ID: <span class="file-id" id="infoFileId">AB4X9F</span></div>
-                                <div>Size: <span id="infoFileSize">4.2 MB</span></div>
-                                <div>Uploaded: <span id="infoUploadDate">Jun 15, 2023</span></div>
-                                <div>Expires: <span id="infoExpiryDate">Jun 22, 2023</span></div>
-                                <div>Status: <span class="status active" id="infoFileStatus">Active</span></div>
-                            </div>
-                            <div class="file-actions">
-                                <button class="action-btn"><i class="fas fa-download"></i> Download</button>
-                                <button class="action-btn"><i class="fas fa-copy"></i> Copy Link</button>
-                                <button class="action-btn"><i class="fas fa-share-alt"></i> Share</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- History View -->
-            <section id="historyView" class="view hidden">
-                <div class="card">
-                    <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 20px;">
-                        <h2>File History</h2>
-                        <div class="history-tabs">
-                            <button class="history-tab active" data-history-type="uploaded">Uploaded Files</button>
-                            <button class="history-tab" data-history-type="downloaded">Downloaded Files</button>
-                        </div>
-                    </div>
-                    
-                    <div class="history-grid" id="historyList">
-                        <!-- History items will be added here dynamically -->
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>OmniShare - Secure File Sharing Platform</p>
-            <p>© 2023 OmniShare. All rights reserved.</p>
-        </footer>
-    </div>
-
-    <!-- Login Modal -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Login to OmniShare</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
-                </div>
-                <button class="btn btn-primary" style="width: 100%;" id="loginSubmit">
-                    Login
-                </button>
-                <div class="switch-form">
-                    Don't have an account? <a href="#" id="goToSignup">Sign up</a>
-                </div>
-            </div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">O</div>
+        <div>
+          <strong>OmniShare</strong>
+          <span>Local-first workspace</span>
         </div>
-    </div>
+      </div>
 
-    <!-- Signup Modal -->
-    <div class="modal" id="signupModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Create an Account</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="form-control" id="signupName" placeholder="Enter your full name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" id="signupPassword" placeholder="Create a password">
-                </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" class="form-control" id="signupConfirm" placeholder="Confirm your password">
-                </div>
-                <button class="btn btn-primary" style="width: 100%;" id="signupSubmit">
-                    Sign Up
-                </button>
-                <div class="switch-form">
-                    Already have an account? <a href="#" id="goToLogin">Login</a>
-                </div>
-            </div>
+      <nav class="side-nav" aria-label="Primary">
+        <button class="nav-item active" type="button" data-view="dashboard">
+          <span class="nav-icon">⌂</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" type="button" data-view="upload">
+          <span class="nav-icon">↑</span>
+          <span>Upload</span>
+        </button>
+        <button class="nav-item" type="button" data-view="retrieve">
+          <span class="nav-icon">↓</span>
+          <span>Retrieve</span>
+        </button>
+        <button class="nav-item" type="button" data-view="library">
+          <span class="nav-icon">▦</span>
+          <span>Library</span>
+        </button>
+        <button class="nav-item" type="button" data-view="activity">
+          <span class="nav-icon">↺</span>
+          <span>Activity</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <div class="note-dot"></div>
+        <div>
+          <strong>Private by default</strong>
+          <p>Files stay in this browser until you delete them.</p>
         </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="ghost-btn compact" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span id="themeIcon">☼</span>
+          <span id="themeLabel">Light mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-only" id="sidebarToggle" type="button" aria-label="Open navigation">☰</button>
+          <div>
+            <p class="eyebrow" id="viewEyebrow">Overview</p>
+            <h1 id="viewTitle">Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="status-pill" title="Files are stored in this browser">
+            <span class="status-dot"></span>
+            Local mode
+          </div>
+          <button class="primary-btn" type="button" data-go="upload">Upload file</button>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="view active" id="dashboardView" data-view-panel="dashboard">
+          <div class="hero-panel">
+            <div>
+              <p class="section-kicker">Secure local workspace</p>
+              <h2>Store, retrieve, and manage files with real browser storage.</h2>
+              <p>
+                OmniShare now stores the actual file data in IndexedDB, not just fake metadata.
+                Upload a file, receive a secure ID, and download it again from this browser at any time until it expires.
+              </p>
+              <div class="hero-actions">
+                <button class="primary-btn large" type="button" data-go="upload">Upload a file</button>
+                <button class="secondary-btn large" type="button" data-go="retrieve">Retrieve by ID</button>
+              </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+              <div class="vault-ring ring-one"></div>
+              <div class="vault-ring ring-two"></div>
+              <div class="vault-core">⇅</div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-label">Stored files</div>
+              <div class="stat-value" id="storedFilesStat">0</div>
+              <div class="stat-detail">Available in this browser</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-label">Storage used</div>
+              <div class="stat-value" id="storageUsedStat">0 B</div>
+              <div class="stat-detail" id="storageQuotaDetail">Checking browser quota…</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-label">Downloads</div>
+              <div class="stat-value" id="downloadsStat">0</div>
+              <div class="stat-detail">Successful local downloads</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-label">Expiring soon</div>
+              <div class="stat-value" id="expiringStat">0</div>
+              <div class="stat-detail">Within the next 24 hours</div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-kicker">Recent files</p>
+                  <h3>Latest uploads</h3>
+                </div>
+                <button class="text-btn" type="button" data-go="library">View library →</button>
+              </div>
+              <div class="compact-list" id="recentFilesList"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-kicker">Storage health</p>
+                  <h3>Browser storage</h3>
+                </div>
+              </div>
+              <div class="storage-meter">
+                <div class="storage-track"><div class="storage-fill" id="storageFill"></div></div>
+                <div class="storage-meta">
+                  <span id="storageUsedLabel">0 B used</span>
+                  <span id="storageQuotaLabel">Quota unavailable</span>
+                </div>
+              </div>
+              <div class="info-box">
+                <strong>How OmniShare works</strong>
+                <p>
+                  In local mode, share IDs work only in this browser profile because there is no cloud database yet.
+                  Use the Share button to send the actual file through your device's native sharing tools when supported.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="uploadView" data-view-panel="upload">
+          <div class="content-header">
+            <div>
+              <p class="section-kicker">Add a file</p>
+              <h2>Upload to your local OmniShare vault</h2>
+              <p>Maximum single-file size: <strong>100 MB</strong>. Actual capacity depends on browser storage quota.</p>
+            </div>
+          </div>
+
+          <div class="upload-layout">
+            <article class="panel upload-panel">
+              <input id="fileInput" type="file" hidden>
+              <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose a file to upload">
+                <div class="drop-icon">↑</div>
+                <h3>Drop a file here</h3>
+                <p>or click to browse your device</p>
+                <span>Any file type • up to 100 MB</span>
+              </div>
+
+              <div class="selected-file hidden" id="selectedFileCard">
+                <div class="file-type-icon" id="selectedFileIcon">FILE</div>
+                <div class="selected-file-info">
+                  <strong id="selectedFileName">—</strong>
+                  <span id="selectedFileMeta">—</span>
+                </div>
+                <button class="icon-button" id="clearSelectedFile" type="button" aria-label="Remove selected file">×</button>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>Expiration</span>
+                  <select id="expirationSelect">
+                    <option value="1">1 hour</option>
+                    <option value="24" selected>24 hours</option>
+                    <option value="168">7 days</option>
+                    <option value="720">30 days</option>
+                    <option value="0">Never</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Note <small>(optional)</small></span>
+                  <input id="fileNote" type="text" maxlength="120" placeholder="What is this file for?">
+                </label>
+              </div>
+
+              <div class="upload-actions">
+                <div class="upload-status">
+                  <span class="muted" id="uploadHint">Choose a file to continue.</span>
+                </div>
+                <button class="primary-btn" id="saveFileBtn" type="button" disabled>Save file</button>
+              </div>
+
+              <div class="progress-wrap hidden" id="uploadProgressWrap" aria-live="polite">
+                <div class="progress-track"><div class="progress-fill" id="uploadProgress"></div></div>
+                <div class="progress-text" id="uploadProgressText">Preparing…</div>
+              </div>
+            </article>
+
+            <aside class="panel tips-panel">
+              <p class="section-kicker">What changed</p>
+              <h3>Real storage, real downloads</h3>
+              <ul class="feature-list">
+                <li>The selected file is stored as a real Blob in IndexedDB.</li>
+                <li>IDs are generated with the browser cryptography API.</li>
+                <li>Expired files cannot be downloaded.</li>
+                <li>Files persist across page refreshes in this browser.</li>
+                <li>You can delete data permanently from the Library.</li>
+              </ul>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="retrieveView" data-view-panel="retrieve">
+          <div class="content-header">
+            <div>
+              <p class="section-kicker">Retrieve a file</p>
+              <h2>Download using an OmniShare ID</h2>
+              <p>Enter an ID created by this browser, such as <code>OMNI-A1B2-C3D4</code>.</p>
+            </div>
+          </div>
+
+          <article class="panel retrieve-panel">
+            <div class="retrieve-search">
+              <label class="field grow">
+                <span>File ID</span>
+                <input id="retrieveIdInput" type="text" autocomplete="off" spellcheck="false" placeholder="OMNI-XXXX-XXXX">
+              </label>
+              <button class="primary-btn" id="findFileBtn" type="button">Find file</button>
+            </div>
+
+            <div class="retrieve-result empty-state" id="retrieveResult">
+              <div class="empty-icon">⌕</div>
+              <h3>Enter a file ID</h3>
+              <p>File information and download controls will appear here.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="view" id="libraryView" data-view-panel="library">
+          <div class="content-header split">
+            <div>
+              <p class="section-kicker">Stored files</p>
+              <h2>Your local library</h2>
+              <p>Manage files stored by OmniShare in this browser.</p>
+            </div>
+            <button class="primary-btn" type="button" data-go="upload">Add file</button>
+          </div>
+
+          <div class="toolbar panel">
+            <label class="search-field">
+              <span class="sr-only">Search library</span>
+              <input id="librarySearch" type="search" placeholder="Search by file name or ID">
+            </label>
+            <select id="librarySort" aria-label="Sort library">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="name">Name A–Z</option>
+              <option value="size">Largest first</option>
+            </select>
+            <button class="danger-outline-btn" id="clearExpiredBtn" type="button">Clear expired</button>
+          </div>
+
+          <div class="file-grid" id="libraryGrid"></div>
+        </section>
+
+        <section class="view" id="activityView" data-view-panel="activity">
+          <div class="content-header split">
+            <div>
+              <p class="section-kicker">Audit trail</p>
+              <h2>Recent activity</h2>
+              <p>Uploads, downloads, shares, and deletions recorded on this device.</p>
+            </div>
+            <button class="secondary-btn" id="clearActivityBtn" type="button">Clear activity</button>
+          </div>
+
+          <article class="panel activity-panel">
+            <div class="activity-list" id="activityList"></div>
+          </article>
+        </section>
+      </main>
     </div>
+  </div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span>File uploaded successfully!</span>
-    </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
-    <script>
-        // Generate a random file ID (6-digit alphanumeric)
-        function generateFileId() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let id = '';
-            for (let i = 0; i < 6; i++) {
-                id += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return id;
-        }
-        
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        // Format date
-        function formatDate(date) {
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-            });
-        }
-        
-        // Calculate expiration date
-        function calculateExpirationDate(days) {
-            if (days === 0) return null; // Never expires
-            
-            const date = new Date();
-            date.setDate(date.getDate() + days);
-            return date;
-        }
-        
-        // Check if a date is expired
-        function isExpired(date) {
-            if (!date) return false; // Never expires
-            return new Date() > date;
-        }
-        
-        // Get expiration status
-        function getExpirationStatus(expiryDate) {
-            if (!expiryDate) return {text: "Never expires", class: "active"};
-            
-            const today = new Date();
-            const diffTime = expiryDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays < 0) {
-                return {text: "Expired", class: "expired"};
-            } else if (diffDays <= 3) {
-                return {text: `Expires in ${diffDays} day${diffDays > 1 ? 's' : ''}`, class: "warning"};
-            } else {
-                return {text: `Expires ${formatDate(expiryDate)}`, class: "active"};
-            }
-        }
+  <dialog class="share-dialog" id="shareDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="section-kicker">File saved</p>
+          <h2>Your OmniShare ID is ready</h2>
+        </div>
+        <button class="icon-button" value="cancel" aria-label="Close">×</button>
+      </div>
 
-        // Current state
-        let currentFile = null;
-        let selectedExpirationDays = 7;
-        let currentHistoryType = 'uploaded';
-        let currentUser = null;
-        let users = {};
-        let fileHistory = {};
+      <div class="share-id-box">
+        <code id="createdFileId">OMNI-XXXX-XXXX</code>
+        <button class="secondary-btn compact" id="copyCreatedIdBtn" type="button">Copy ID</button>
+      </div>
 
-        // Initialize data
-        function initializeData() {
-            // Check if data exists in localStorage
-            if (localStorage.getItem('omniUsers')) {
-                users = JSON.parse(localStorage.getItem('omniUsers'));
-            }
-            
-            if (localStorage.getItem('omniFiles')) {
-                fileHistory = JSON.parse(localStorage.getItem('omniFiles'));
-            }
-            
-            // If no files, create empty structure
-            if (!fileHistory.uploads) fileHistory.uploads = {};
-            if (!fileHistory.downloads) fileHistory.downloads = {};
-            
-            updateStats();
-        }
-        
-        // Update stats
-        function updateStats() {
-            if (currentUser) {
-                const userUploads = fileHistory.uploads[currentUser] || [];
-                const userDownloads = fileHistory.downloads[currentUser] || [];
-                
-                document.getElementById('uploadCount').textContent = userUploads.length;
-                document.getElementById('downloadCount').textContent = userDownloads.length;
-            }
-        }
-        
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem('omniUsers', JSON.stringify(users));
-            localStorage.setItem('omniFiles', JSON.stringify(fileHistory));
-        }
-        
-        // Set current user
-        function setCurrentUser(email) {
-            currentUser = email;
-            
-            // Update UI
-            const name = users[email].name;
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-            document.getElementById('userAvatar').textContent = initials;
-            
-            // Update stats
-            updateStats();
-            
-            // Update history if we're on that view
-            if (document.getElementById('historyView').classList.contains('hidden') === false) {
-                renderFileHistory(currentHistoryType);
-            }
-        }
-        
-        // View management
-        function showView(viewId) {
-            // Hide all views
-            document.querySelectorAll('.view').forEach(view => {
-                view.classList.add('hidden');
-            });
-            
-            // Show the requested view
-            document.getElementById(viewId).classList.remove('hidden');
-            
-            // Update active nav link
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            document.querySelector(`nav a[data-view="${viewId}"]`).closest('a').classList.add('active');
-            
-            // If history view, render it
-            if (viewId === 'historyView') {
-                renderFileHistory(currentHistoryType);
-            }
-        }
+      <p class="dialog-note">
+        This ID retrieves the file from this browser profile. For cross-device sharing, use the Share file button when your browser supports native file sharing.
+      </p>
 
-        // Modal management
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        function closeAllModals() {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.classList.remove('active');
-            });
-            document.body.style.overflow = '';
-        }
+      <div class="dialog-actions">
+        <button class="secondary-btn" id="shareCreatedFileBtn" type="button">Share file</button>
+        <button class="primary-btn" value="confirm">Done</button>
+      </div>
+    </form>
+  </dialog>
 
-        // Show notification
-        function showNotification(message, isSuccess = true) {
-            const notification = document.getElementById('notification');
-            const icon = notification.querySelector('i');
-            const text = notification.querySelector('span');
-            
-            text.textContent = message;
-            
-            if (isSuccess) {
-                notification.classList.add('success');
-                notification.classList.remove('error');
-                icon.className = 'fas fa-check-circle';
-            } else {
-                notification.classList.add('error');
-                notification.classList.remove('success');
-                icon.className = 'fas fa-exclamation-circle';
-            }
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+  <template id="fileCardTemplate">
+    <article class="file-card">
+      <div class="file-card-top">
+        <div class="file-type-icon file-card-icon">FILE</div>
+        <div class="file-card-status"></div>
+      </div>
+      <div class="file-card-body">
+        <h3 class="file-card-name"></h3>
+        <code class="file-card-id"></code>
+        <p class="file-card-note"></p>
+        <dl class="file-card-meta">
+          <div><dt>Size</dt><dd class="file-card-size"></dd></div>
+          <div><dt>Added</dt><dd class="file-card-date"></dd></div>
+          <div><dt>Expires</dt><dd class="file-card-expiry"></dd></div>
+        </dl>
+      </div>
+      <div class="file-card-actions">
+        <button class="secondary-btn compact download-action" type="button">Download</button>
+        <button class="ghost-btn compact copy-action" type="button">Copy ID</button>
+        <button class="ghost-btn compact share-action" type="button">Share</button>
+        <button class="danger-text-btn compact delete-action" type="button">Delete</button>
+      </div>
+    </article>
+  </template>
 
-        // Render file history
-        function renderFileHistory(type) {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            
-            if (!currentUser) {
-                historyList.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--gray);">
-                        <i class="fas fa-user-lock" style="font-size: 56px; margin-bottom: 20px; color: var(--primary);"></i>
-                        <h3>Login Required</h3>
-                        <p>Please log in to view your file history</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let files = [];
-            if (type === 'uploaded') {
-                files = fileHistory.uploads[currentUser] || [];
-            } else {
-                files = fileHistory.downloads[currentUser] || [];
-            }
-            
-            if (files.length === 0) {
-                historyList.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--gray);">
-                        <i class="fas fa-inbox" style="font-size: 56px; margin-bottom: 20px; color: var(--primary);"></i>
-                        <h3>No files found</h3>
-                        <p>Your ${type} files will appear here</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            files.forEach(file => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                
-                let fileIcon;
-                switch(file.type) {
-                    case 'pdf': fileIcon = 'fa-file-pdf'; break;
-                    case 'doc': fileIcon = 'fa-file-word'; break;
-                    case 'xls': fileIcon = 'fa-file-excel'; break;
-                    case 'ppt': fileIcon = 'fa-file-powerpoint'; break;
-                    case 'zip': fileIcon = 'fa-file-archive'; break;
-                    default: fileIcon = 'fa-file';
-                }
-                
-                // For uploaded files, show expiration info
-                let expirationInfo = '';
-                let expirationBadge = '';
-                
-                if (type === 'uploaded' && file.expiryDate) {
-                    const status = getExpirationStatus(new Date(file.expiryDate));
-                    expirationInfo = `<div>Expires: ${formatDate(new Date(file.expiryDate))}</div>`;
-                    expirationBadge = `<div class="expiration-badge ${status.class}">${status.text}</div>`;
-                } else if (type === 'uploaded' && !file.expiryDate) {
-                    expirationBadge = `<div class="expiration-badge active">Never expires</div>`;
-                }
-                
-                historyItem.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 20px;">
-                        <div class="file-icon">
-                            <i class="fas ${fileIcon}"></i>
-                        </div>
-                        <div class="file-info">
-                            <div class="file-name">
-                                ${file.name}
-                            </div>
-                            <div class="file-id">ID: ${file.id}</div>
-                            <div class="status ${type === 'uploaded' ? 'upload' : 'download'}">${type === 'uploaded' ? 'Uploaded' : 'Downloaded'}</div>
-                        </div>
-                    </div>
-                    <div class="file-meta">
-                        <div>Size: ${formatFileSize(file.size)}</div>
-                        <div>Date: ${formatDate(new Date(file.date))}</div>
-                        ${expirationInfo}
-                    </div>
-                    ${expirationBadge}
-                    <div class="file-actions">
-                        <button class="action-btn"><i class="fas fa-download"></i> Download</button>
-                        <button class="action-btn"><i class="fas fa-copy"></i> Copy ID</button>
-                        ${type === 'uploaded' ? '<button class="action-btn"><i class="fas fa-trash-alt"></i> Delete</button>' : ''}
-                    </div>
-                `;
-                
-                historyList.appendChild(historyItem);
-            });
-        }
-
-        // Simulate file upload
-        function uploadFile(file, expirationDays) {
-            const progressBar = document.getElementById('uploadProgress');
-            let progress = 0;
-            
-            const uploadInterval = setInterval(() => {
-                progress += Math.random() * 10;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(uploadInterval);
-                    
-                    // Generate file ID
-                    const fileId = generateFileId();
-                    
-                    // Calculate expiration date
-                    const expiryDate = expirationDays > 0 ? calculateExpirationDate(expirationDays) : null;
-                    
-                    // Create file object
-                    const fileObj = {
-                        id: fileId,
-                        name: file.name,
-                        type: file.name.split('.').pop(),
-                        size: file.size,
-                        date: new Date(),
-                        expiryDate: expiryDate,
-                        owner: currentUser
-                    };
-                    
-                    // Add to history
-                    if (!fileHistory.uploads[currentUser]) {
-                        fileHistory.uploads[currentUser] = [];
-                    }
-                    fileHistory.uploads[currentUser].unshift(fileObj);
-                    
-                    // Save data
-                    saveData();
-                    
-                    // Update stats
-                    updateStats();
-                    
-                    // Show notification
-                    showNotification('File uploaded successfully!');
-                    
-                    // Reset UI
-                    document.getElementById('filePreview').classList.add('hidden');
-                    document.getElementById('dropArea').classList.remove('hidden');
-                    progressBar.style.width = '0%';
-                    
-                    // Update history if we're on that view
-                    if (document.getElementById('historyView').classList.contains('hidden') === false) {
-                        renderFileHistory(currentHistoryType);
-                    }
-                    
-                    // Show file ID to user
-                    showNotification(`Your file ID: ${fileId}`, true);
-                }
-                
-                progressBar.style.width = `${progress}%`;
-            }, 200);
-        }
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize data
-            initializeData();
-            
-            // Navigation
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const view = link.getAttribute('data-view');
-                    showView(`${view}View`);
-                });
-            });
-            
-            // History tabs
-            document.querySelectorAll('.history-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.history-tab').forEach(t => {
-                        t.classList.remove('active');
-                    });
-                    tab.classList.add('active');
-                    currentHistoryType = tab.getAttribute('data-history-type');
-                    renderFileHistory(currentHistoryType);
-                });
-            });
-            
-            // Login/Signup buttons
-            document.getElementById('loginBtn').addEventListener('click', () => {
-                openModal('loginModal');
-            });
-            
-            document.getElementById('signupBtn').addEventListener('click', () => {
-                openModal('signupModal');
-            });
-            
-            // Login submit
-            document.getElementById('loginSubmit').addEventListener('click', () => {
-                const email = document.getElementById('loginEmail').value.trim();
-                const password = document.getElementById('loginPassword').value.trim();
-                
-                if (!email || !password) {
-                    showNotification('Please fill in all fields', false);
-                    return;
-                }
-                
-                if (users[email] && users[email].password === password) {
-                    setCurrentUser(email);
-                    closeAllModals();
-                    showNotification('Login successful!');
-                } else {
-                    showNotification('Invalid email or password', false);
-                }
-            });
-            
-            // Signup submit
-            document.getElementById('signupSubmit').addEventListener('click', () => {
-                const name = document.getElementById('signupName').value.trim();
-                const email = document.getElementById('signupEmail').value.trim();
-                const password = document.getElementById('signupPassword').value;
-                const confirm = document.getElementById('signupConfirm').value;
-                
-                if (!name || !email || !password || !confirm) {
-                    showNotification('Please fill in all fields', false);
-                    return;
-                }
-                
-                if (password !== confirm) {
-                    showNotification('Passwords do not match', false);
-                    return;
-                }
-                
-                if (users[email]) {
-                    showNotification('Email already registered', false);
-                    return;
-                }
-                
-                // Create user
-                users[email] = {
-                    name: name,
-                    email: email,
-                    password: password
-                };
-                
-                // Save data
-                saveData();
-                
-                // Set as current user
-                setCurrentUser(email);
-                
-                closeAllModals();
-                showNotification('Account created successfully!');
-            });
-            
-            // Close modals
-            document.querySelectorAll('.close-modal').forEach(button => {
-                button.addEventListener('click', () => {
-                    closeAllModals();
-                });
-            });
-            
-            // Switch between login and signup modals
-            document.getElementById('goToSignup').addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal('loginModal');
-                openModal('signupModal');
-            });
-            
-            document.getElementById('goToLogin').addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal('signupModal');
-                openModal('loginModal');
-            });
-            
-            // Close modal when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        closeAllModals();
-                    }
-                });
-            });
-            
-            // Expiration options
-            document.querySelectorAll('.expiration-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.expiration-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    option.classList.add('selected');
-                    selectedExpirationDays = parseInt(option.getAttribute('data-days'));
-                });
-            });
-            
-            // Drag and drop area
-            const dropArea = document.getElementById('dropArea');
-            
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => {
-                    dropArea.classList.add('drag-over');
-                }, false);
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => {
-                    dropArea.classList.remove('drag-over');
-                }, false);
-            });
-            
-            dropArea.addEventListener('drop', (e) => {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                
-                if (files.length) {
-                    handleFileSelection(files[0]);
-                }
-            }, false);
-            
-            // Browse files button
-            document.getElementById('browseBtn').addEventListener('click', () => {
-                // Create a file input
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.style.display = 'none';
-                
-                fileInput.addEventListener('change', (e) => {
-                    if (e.target.files.length) {
-                        handleFileSelection(e.target.files[0]);
-                    }
-                });
-                
-                document.body.appendChild(fileInput);
-                fileInput.click();
-                document.body.removeChild(fileInput);
-            });
-            
-            // Handle file selection
-            function handleFileSelection(file) {
-                if (!currentUser) {
-                    showNotification('Please log in to upload files', false);
-                    return;
-                }
-                
-                currentFile = file;
-                
-                // Update preview
-                document.getElementById('previewFileName').textContent = file.name;
-                document.getElementById('previewFileSize').textContent = formatFileSize(file.size);
-                
-                // Show preview and hide drop area
-                document.getElementById('dropArea').classList.add('hidden');
-                document.getElementById('filePreview').classList.remove('hidden');
-            }
-            
-            // Cancel upload
-            document.getElementById('cancelUpload').addEventListener('click', () => {
-                document.getElementById('filePreview').classList.add('hidden');
-                document.getElementById('dropArea').classList.remove('hidden');
-                document.getElementById('uploadProgress').style.width = '0%';
-                currentFile = null;
-            });
-            
-            // Confirm upload
-            document.getElementById('confirmUpload').addEventListener('click', () => {
-                if (!currentUser) {
-                    showNotification('Please log in to upload files', false);
-                    return;
-                }
-                
-                if (currentFile) {
-                    uploadFile(currentFile, selectedExpirationDays);
-                }
-            });
-            
-            // Download file
-            document.getElementById('downloadBtn').addEventListener('click', () => {
-                if (!currentUser) {
-                    showNotification('Please log in to download files', false);
-                    return;
-                }
-                
-                const fileId = document.getElementById('fileIdInput').value.trim();
-                if (!fileId) {
-                    showNotification('Please enter a file ID', false);
-                    return;
-                }
-                
-                // Find file in any user's uploads
-                let file = null;
-                for (const user in fileHistory.uploads) {
-                    const found = fileHistory.uploads[user].find(f => f.id === fileId);
-                    if (found) {
-                        file = found;
-                        break;
-                    }
-                }
-                
-                if (file) {
-                    if (file.expiryDate && isExpired(new Date(file.expiryDate))) {
-                        showNotification('This file has expired', false);
-                    } else {
-                        // Simulate download
-                        showNotification('File download started');
-                        
-                        // Add to download history
-                        if (!fileHistory.downloads[currentUser]) {
-                            fileHistory.downloads[currentUser] = [];
-                        }
-                        
-                        // Create a copy for download history
-                        const downloadRecord = {
-                            id: file.id,
-                            name: file.name,
-                            type: file.type,
-                            size: file.size,
-                            date: new Date(),
-                            originalOwner: file.owner
-                        };
-                        
-                        fileHistory.downloads[currentUser].unshift(downloadRecord);
-                        
-                        // Save data
-                        saveData();
-                        
-                        // Update stats
-                        updateStats();
-                        
-                        // Update history
-                        if (!document.getElementById('historyView').classList.contains('hidden')) {
-                            renderFileHistory(currentHistoryType);
-                        }
-                    }
-                } else {
-                    showNotification('File not found', false);
-                }
-            });
-            
-            // Check file info
-            document.getElementById('checkFileBtn').addEventListener('click', () => {
-                const fileId = document.getElementById('checkFileId').value.trim();
-                if (!fileId) {
-                    showNotification('Please enter a file ID', false);
-                    return;
-                }
-                
-                // Find file in any user's uploads
-                let file = null;
-                for (const user in fileHistory.uploads) {
-                    const found = fileHistory.uploads[user].find(f => f.id === fileId);
-                    if (found) {
-                        file = found;
-                        break;
-                    }
-                }
-                
-                const fileInfoCard = document.getElementById('fileInfoCard');
-                
-                if (file) {
-                    // Update file info
-                    document.getElementById('infoFileName').textContent = file.name;
-                    document.getElementById('infoFileId').textContent = file.id;
-                    document.getElementById('infoFileSize').textContent = formatFileSize(file.size);
-                    document.getElementById('infoUploadDate').textContent = formatDate(new Date(file.date));
-                    
-                    if (file.expiryDate) {
-                        const status = getExpirationStatus(new Date(file.expiryDate));
-                        document.getElementById('infoExpiryDate').textContent = formatDate(new Date(file.expiryDate));
-                        document.getElementById('infoFileStatus').textContent = status.text;
-                        document.getElementById('infoFileStatus').className = `status ${status.class}`;
-                    } else {
-                        document.getElementById('infoExpiryDate').textContent = "Never";
-                        document.getElementById('infoFileStatus').textContent = "Active";
-                        document.getElementById('infoFileStatus').className = "status active";
-                    }
-                    
-                    // Show file info card
-                    fileInfoCard.classList.remove('hidden');
-                } else {
-                    showNotification('File not found', false);
-                    fileInfoCard.classList.add('hidden');
-                }
-            });
-        });
-    </script>
+  <script src="app.js" defer></script>
 </body>
 </html>
