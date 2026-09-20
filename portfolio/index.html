@@ -114,6 +114,7 @@
     .profile-card { position: relative; overflow: hidden; padding: 28px; border: 1px solid var(--border); border-radius: 28px; background: linear-gradient(180deg,rgba(255,255,255,.045),transparent),var(--surface); box-shadow: var(--shadow); }
     .profile-card::before { content: ""; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: rgba(99,214,255,.14); filter: blur(42px); top: -90px; right: -70px; }
     .avatar { width: 94px; height: 94px; object-fit: cover; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 21px; position: relative; }
+    .avatar-initials { display: grid; place-items: center; background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: #06111e; font-size: 1.45rem; font-weight: 900; letter-spacing: -.04em; }
     .profile-card h2 { font-size: 1.5rem; margin-bottom: 5px; position: relative; }
     .profile-role { color: var(--accent); font-size: 14px; font-weight: 900; margin-bottom: 18px; position: relative; }
     .profile-card p { color: var(--muted); font-size: 14px; position: relative; }
@@ -270,7 +271,7 @@
         </div>
 
         <aside class="profile-card" aria-label="Professional profile">
-          <img class="avatar" src="https://avatars.githubusercontent.com/u/206280662?v=4" alt="GitHub avatar for Sachibara">
+          <div class="avatar avatar-initials" aria-hidden="true">JC</div>
           <h2>Jim Rodmark Camus</h2>
           <div class="profile-role">IT Network Support • Network Technology • Cybersecurity • Developer</div>
           <p>
