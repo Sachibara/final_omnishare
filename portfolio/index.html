@@ -3,63 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Professional developer portfolio for Jim Rodmark Camus, featuring network security, Python desktop applications, and web projects.">
-  <meta name="theme-color" content="#08111f">
-  <title>Jim Rodmark Camus | Network & Software Developer</title>
+  <meta name="description" content="IT portfolio of Jim Rodmark Camus — BSIT Network Technology graduate focused on IT Network Support, cybersecurity, Python desktop development, and full-stack systems.">
+  <meta name="theme-color" content="#07111f">
+  <title>Jim Rodmark Camus | IT Network Support & Developer</title>
   <style>
     :root {
       --bg: #07111f;
       --bg-soft: #0c1727;
-      --surface: rgba(18, 31, 49, 0.82);
+      --surface: rgba(18,31,49,.86);
       --surface-solid: #111f31;
       --surface-2: #17283e;
       --text: #eef5ff;
-      --muted: #94a9c2;
-      --border: rgba(155, 184, 218, 0.18);
-      --accent: #65d8ff;
-      --accent-2: #78f0ba;
-      --accent-soft: rgba(101, 216, 255, 0.12);
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
-      --header: rgba(7, 17, 31, 0.78);
-      --max-width: 1180px;
+      --muted: #9aadc3;
+      --border: rgba(160,188,220,.18);
+      --accent: #63d6ff;
+      --accent-2: #7af0bd;
+      --accent-soft: rgba(99,214,255,.11);
+      --shadow: 0 24px 70px rgba(0,0,0,.28);
+      --header: rgba(7,17,31,.82);
+      --max: 1180px;
     }
 
     html[data-theme="light"] {
       --bg: #f6f9fd;
       --bg-soft: #edf3fa;
-      --surface: rgba(255, 255, 255, 0.86);
-      --surface-solid: #ffffff;
+      --surface: rgba(255,255,255,.9);
+      --surface-solid: #fff;
       --surface-2: #edf4fb;
       --text: #122238;
-      --muted: #5b6f86;
-      --border: rgba(35, 66, 100, 0.14);
+      --muted: #5e7187;
+      --border: rgba(35,66,100,.14);
       --accent: #087ea4;
       --accent-2: #0a8f64;
-      --accent-soft: rgba(8, 126, 164, 0.09);
-      --shadow: 0 22px 60px rgba(45, 72, 105, 0.12);
-      --header: rgba(246, 249, 253, 0.82);
+      --accent-soft: rgba(8,126,164,.09);
+      --shadow: 0 22px 60px rgba(45,72,105,.12);
+      --header: rgba(246,249,253,.86);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(101, 216, 255, 0.12), transparent 28%),
-        radial-gradient(circle at 88% 12%, rgba(120, 240, 186, 0.1), transparent 24%),
-        var(--bg);
       color: var(--text);
       line-height: 1.65;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(99,214,255,.13), transparent 27%),
+        radial-gradient(circle at 88% 14%, rgba(122,240,189,.09), transparent 25%),
+        var(--bg);
     }
 
     body::before {
@@ -67,865 +58,155 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.26;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: linear-gradient(to bottom, black, transparent 82%);
       z-index: -1;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, #000, transparent 82%);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    .container {
-      width: min(calc(100% - 40px), var(--max-width));
-      margin: 0 auto;
-    }
-
-    .skip-link {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      transform: translateY(-160%);
-      padding: 10px 14px;
-      background: var(--text);
-      color: var(--bg);
-      border-radius: 10px;
-      z-index: 999;
-      transition: transform 0.2s ease;
-    }
-
-    .skip-link:focus {
-      transform: translateY(0);
-    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
+    .skip-link { position: fixed; top: 12px; left: 12px; transform: translateY(-160%); padding: 10px 14px; background: var(--text); color: var(--bg); border-radius: 10px; z-index: 100; }
+    .skip-link:focus { transform: translateY(0); }
 
     .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(18px);
+      position: sticky; top: 0; z-index: 40;
       background: var(--header);
       border-bottom: 1px solid var(--border);
-    }
-
-    .nav-wrap {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #07111f;
-      font-size: 14px;
-      box-shadow: 0 10px 30px rgba(101, 216, 255, 0.2);
-    }
-
-    .desktop-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .desktop-nav a {
-      padding: 9px 12px;
-      border-radius: 10px;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 700;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .desktop-nav a:hover,
-    .desktop-nav a:focus-visible {
-      background: var(--accent-soft);
-      color: var(--text);
-      outline: none;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .icon-btn {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 12px;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .icon-btn:hover {
-      transform: translateY(-2px);
-      border-color: rgba(101, 216, 255, 0.45);
-    }
-
-    .menu-btn {
-      display: none;
-    }
-
-    .mobile-nav {
-      display: none;
-      padding: 0 0 16px;
-    }
-
-    .mobile-nav.open {
-      display: grid;
-      gap: 8px;
-    }
-
-    .mobile-nav a {
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--surface);
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    main section {
-      scroll-margin-top: 90px;
-    }
-
-    .hero {
-      min-height: calc(100vh - 72px);
-      display: grid;
-      align-items: center;
-      padding: 76px 0 60px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-      gap: 48px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 7px 11px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 20px;
-    }
-
-    .eyebrow-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent-2);
-      box-shadow: 0 0 0 5px rgba(120, 240, 186, 0.11);
-    }
-
-    h1 {
-      max-width: 850px;
-      font-size: clamp(3rem, 7.2vw, 6.6rem);
-      line-height: 0.95;
-      letter-spacing: -0.055em;
-      margin-bottom: 24px;
-    }
-
-    .gradient-text {
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-copy {
-      max-width: 690px;
-      color: var(--muted);
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      margin-bottom: 28px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .btn {
-      min-height: 46px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 0 18px;
-      border-radius: 13px;
-      border: 1px solid var(--border);
-      font-weight: 800;
-      font-size: 14px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #06111e;
-      border-color: transparent;
-      box-shadow: 0 14px 34px rgba(101, 216, 255, 0.18);
-    }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text);
-    }
-
-    .hero-facts {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 26px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .hero-facts span {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .fact-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .profile-card {
-      position: relative;
-      overflow: hidden;
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent), var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .profile-card::before {
-      content: "";
-      position: absolute;
-      inset: -40% auto auto 55%;
-      width: 230px;
-      height: 230px;
-      border-radius: 50%;
-      background: rgba(101, 216, 255, 0.16);
-      filter: blur(40px);
-    }
-
-    .avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 24px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-      margin-bottom: 22px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-card h2 {
-      font-size: 1.45rem;
-      margin-bottom: 6px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-role {
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 14px;
-      margin-bottom: 18px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-card p {
-      color: var(--muted);
-      font-size: 14px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 22px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-list div {
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.035);
-      border: 1px solid var(--border);
-    }
-
-    .profile-list strong {
-      display: block;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-
-    .section {
-      padding: 84px 0;
-    }
-
-    .section-heading {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
-      gap: 30px;
-      align-items: end;
-      margin-bottom: 34px;
-    }
-
-    .section-kicker {
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      margin-bottom: 10px;
-    }
-
-    .section-heading h2 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-    }
-
-    .section-heading p {
-      color: var(--muted);
-      max-width: 520px;
-      justify-self: end;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .filter-btn {
-      padding: 9px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--muted);
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .filter-btn:hover,
-    .filter-btn.active {
-      color: var(--text);
-      background: var(--accent-soft);
-      border-color: rgba(101, 216, 255, 0.4);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-
-    .project-card {
-      grid-column: span 6;
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: 26px;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      box-shadow: 0 15px 42px rgba(0,0,0,0.08);
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .project-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(101, 216, 255, 0.38);
-      box-shadow: var(--shadow);
-    }
-
-    .project-card.featured {
-      grid-column: span 12;
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-      gap: 26px;
-      align-items: stretch;
-    }
-
-    .project-card.hidden {
-      display: none;
-    }
-
-    .project-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    .project-number {
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-weight: 900;
-      border: 1px solid var(--border);
-    }
-
-    .status {
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .project-card h3 {
-      font-size: 1.55rem;
-      margin-bottom: 8px;
-      letter-spacing: -0.02em;
-    }
-
-    .project-card p {
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    .feature-list {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-      margin: 4px 0 22px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .feature-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .feature-list li::before {
-      content: "↗";
-      color: var(--accent-2);
-      font-weight: 900;
-      margin-top: 1px;
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: auto;
-    }
-
-    .tag {
-      padding: 6px 9px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.025);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .project-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 22px;
-    }
-
-    .project-panel {
-      min-height: 100%;
-      padding: 22px;
-      border-radius: 18px;
-      background:
-        linear-gradient(135deg, rgba(101,216,255,0.08), rgba(120,240,186,0.04)),
-        var(--surface-2);
-      border: 1px solid var(--border);
-      display: grid;
-      align-content: space-between;
-      gap: 24px;
-    }
-
-    .mini-terminal {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 12px;
-      color: #bdeeff;
-      padding: 18px;
-      border-radius: 14px;
-      background: #07111f;
-      border: 1px solid rgba(255,255,255,0.08);
-      overflow: auto;
-    }
-
-    .mini-terminal .prompt {
-      color: #78f0ba;
-    }
-
-    .mini-terminal .muted-line {
-      color: #6f89a4;
-    }
-
-    .panel-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .panel-stat {
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: rgba(255,255,255,0.025);
-    }
-
-    .panel-stat strong {
-      display: block;
-      font-size: 1.25rem;
-      color: var(--text);
-    }
-
-    .panel-stat span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
-    .skill-card {
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--surface);
-    }
-
-    .skill-card h3 {
-      font-size: 1rem;
-      margin-bottom: 9px;
-    }
-
-    .skill-card p {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .skill-icon {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 11px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      margin-bottom: 16px;
-      font-weight: 900;
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      gap: 30px;
-    }
-
-    .about-card,
-    .timeline {
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      background: var(--surface);
-      padding: 26px;
-    }
-
-    .about-card p {
-      color: var(--muted);
-      margin-top: 12px;
-    }
-
-    .about-card .highlight {
-      color: var(--text);
-      font-weight: 800;
-    }
-
-    .timeline {
-      display: grid;
-      gap: 18px;
-    }
-
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 14px minmax(0, 1fr);
-      gap: 14px;
-    }
-
-    .timeline-marker {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-top: 7px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px var(--accent-soft);
-    }
-
-    .timeline-item h3 {
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-
-    .timeline-item p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .contact-card {
-      position: relative;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 30px;
-      padding: 34px;
-      border-radius: 26px;
-      border: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(101,216,255,0.08), rgba(120,240,186,0.06)), var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .contact-card h2 {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      letter-spacing: -0.04em;
-      margin-bottom: 10px;
-    }
-
-    .contact-card p {
-      color: var(--muted);
-      max-width: 720px;
-    }
-
-    footer {
-      padding: 28px 0 42px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .footer-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 14px;
-    }
-
-    .footer-links a:hover {
-      color: var(--text);
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    :focus-visible {
-      outline: 3px solid rgba(101, 216, 255, 0.55);
-      outline-offset: 3px;
-    }
-
-    @media (max-width: 940px) {
-      .desktop-nav {
-        display: none;
-      }
-
-      .menu-btn {
-        display: grid;
-      }
-
-      .hero {
-        min-height: auto;
-      }
-
-      .hero-grid,
-      .section-heading,
-      .about-grid,
-      .contact-card {
-        grid-template-columns: 1fr;
-      }
-
-      .section-heading p {
-        justify-self: start;
-      }
-
-      .project-card.featured {
-        grid-template-columns: 1fr;
-      }
-
-      .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-card {
-        align-items: start;
-      }
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-wrap { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: -.02em; }
+    .brand-mark { width: 39px; height: 39px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: #06111e; font-size: 14px; box-shadow: 0 10px 30px rgba(99,214,255,.2); }
+    .desktop-nav { display: flex; align-items: center; gap: 5px; }
+    .desktop-nav a { padding: 9px 11px; border-radius: 10px; color: var(--muted); font-size: 13px; font-weight: 800; }
+    .desktop-nav a:hover, .desktop-nav a:focus-visible { background: var(--accent-soft); color: var(--text); outline: none; }
+    .nav-actions { display: flex; gap: 8px; }
+    .icon-btn { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+    .menu-btn { display: none; }
+    .mobile-nav { display: none; padding-bottom: 16px; }
+    .mobile-nav.open { display: grid; gap: 8px; }
+    .mobile-nav a { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-weight: 800; }
+
+    main section { scroll-margin-top: 90px; }
+    .hero { min-height: calc(100vh - 72px); display: grid; align-items: center; padding: 72px 0 58px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(300px,.8fr); gap: 48px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; padding: 7px 11px; border-radius: 999px; background: var(--accent-soft); border: 1px solid var(--border); color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 900; margin-bottom: 20px; }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 5px rgba(122,240,189,.11); }
+    h1 { max-width: 900px; font-size: clamp(3rem,7vw,6.25rem); line-height: .96; letter-spacing: -.055em; margin-bottom: 24px; }
+    .gradient { background: linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-copy { max-width: 730px; color: var(--muted); font-size: clamp(1.05rem,2vw,1.23rem); margin-bottom: 28px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+    .btn { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 0 18px; border-radius: 13px; border: 1px solid var(--border); font-weight: 900; font-size: 14px; transition: transform .2s ease, border-color .2s ease; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: #06111e; border-color: transparent; }
+    .btn-secondary { background: var(--surface); color: var(--text); }
+    .hero-facts { display: flex; flex-wrap: wrap; gap: 14px 24px; color: var(--muted); font-size: 13px; font-weight: 800; }
+    .hero-facts span { display: inline-flex; align-items: center; gap: 8px; }
+    .fact-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .profile-card { position: relative; overflow: hidden; padding: 28px; border: 1px solid var(--border); border-radius: 28px; background: linear-gradient(180deg,rgba(255,255,255,.045),transparent),var(--surface); box-shadow: var(--shadow); }
+    .profile-card::before { content: ""; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: rgba(99,214,255,.14); filter: blur(42px); top: -90px; right: -70px; }
+    .avatar { width: 94px; height: 94px; object-fit: cover; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 21px; position: relative; }
+    .profile-card h2 { font-size: 1.5rem; margin-bottom: 5px; position: relative; }
+    .profile-role { color: var(--accent); font-size: 14px; font-weight: 900; margin-bottom: 18px; position: relative; }
+    .profile-card p { color: var(--muted); font-size: 14px; position: relative; }
+    .quick-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 22px; position: relative; }
+    .quick-stat { padding: 13px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
+    .quick-stat strong { display: block; color: var(--text); font-size: 1.1rem; }
+    .quick-stat span { color: var(--muted); font-size: 12px; }
+
+    .section { padding: 82px 0; }
+    .section-heading { display: grid; grid-template-columns: minmax(0,1fr) minmax(260px,.58fr); gap: 30px; align-items: end; margin-bottom: 34px; }
+    .section-kicker { color: var(--accent); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .13em; margin-bottom: 10px; }
+    .section-heading h2 { font-size: clamp(2rem,4vw,3.45rem); line-height: 1.05; letter-spacing: -.04em; }
+    .section-heading p { color: var(--muted); max-width: 540px; justify-self: end; }
+
+    .experience-grid { display: grid; gap: 16px; }
+    .experience-card { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 28px; padding: 26px; border-radius: 22px; border: 1px solid var(--border); background: var(--surface); }
+    .experience-meta { color: var(--muted); font-size: 13px; }
+    .experience-meta strong { display: block; color: var(--accent); font-size: 14px; margin-bottom: 6px; }
+    .experience-card h3 { font-size: 1.28rem; margin-bottom: 4px; }
+    .experience-card .company { color: var(--accent-2); font-weight: 800; margin-bottom: 15px; }
+    .bullet-list { list-style: none; display: grid; gap: 9px; color: var(--muted); font-size: 14px; }
+    .bullet-list li { display: flex; gap: 10px; }
+    .bullet-list li::before { content: "↗"; color: var(--accent); font-weight: 900; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(12,1fr); gap: 18px; }
+    .project-card { grid-column: span 6; display: flex; flex-direction: column; min-height: 100%; padding: 25px; border-radius: 22px; border: 1px solid var(--border); background: var(--surface); transition: transform .22s ease, border-color .22s ease; }
+    .project-card:hover { transform: translateY(-4px); border-color: rgba(99,214,255,.42); }
+    .project-card.featured { grid-column: span 12; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(300px,.9fr); gap: 25px; }
+    .project-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .project-number { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--border); font-weight: 900; }
+    .status { padding: 6px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; }
+    .project-card h3 { font-size: 1.55rem; margin-bottom: 8px; }
+    .project-card p { color: var(--muted); margin-bottom: 18px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+    .tag { padding: 6px 9px; border-radius: 9px; border: 1px solid var(--border); background: rgba(255,255,255,.025); color: var(--muted); font-size: 12px; font-weight: 800; }
+    .project-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+    .project-panel { padding: 22px; border-radius: 18px; border: 1px solid var(--border); background: linear-gradient(135deg,rgba(99,214,255,.08),rgba(122,240,189,.04)),var(--surface-2); display: grid; gap: 18px; align-content: space-between; }
+    .terminal { font-family: Consolas, "SFMono-Regular", monospace; font-size: 12px; color: #bcefff; padding: 17px; border-radius: 14px; background: #07111f; border: 1px solid rgba(255,255,255,.08); overflow: auto; }
+    .terminal .ok { color: #7af0bd; }
+    .terminal .dim { color: #718aa5; }
+
+    .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    .skill-card { padding: 21px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); }
+    .skill-icon { width: 39px; height: 39px; border-radius: 11px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 900; margin-bottom: 15px; }
+    .skill-card h3 { font-size: 1rem; margin-bottom: 10px; }
+    .skill-card p { color: var(--muted); font-size: 13px; }
+
+    .credential-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    .credential-card { padding: 24px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); }
+    .credential-card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+    .credential-card p { color: var(--muted); font-size: 14px; }
+    .credential-list { list-style: none; display: grid; gap: 11px; }
+    .credential-list li { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.025); border: 1px solid var(--border); }
+    .credential-list strong { display: block; margin-bottom: 2px; }
+    .credential-list span { color: var(--muted); font-size: 13px; }
+
+    .contact-card { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 30px; align-items: center; padding: 34px; border-radius: 26px; border: 1px solid var(--border); background: linear-gradient(135deg,rgba(99,214,255,.08),rgba(122,240,189,.055)),var(--surface); box-shadow: var(--shadow); }
+    .contact-card h2 { font-size: clamp(2rem,4vw,3.15rem); letter-spacing: -.04em; margin-bottom: 10px; }
+    .contact-card p { color: var(--muted); max-width: 720px; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+
+    footer { padding: 28px 0 42px; color: var(--muted); font-size: 13px; }
+    .footer-wrap { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .footer-links { display: flex; gap: 14px; }
+    :focus-visible { outline: 3px solid rgba(99,214,255,.55); outline-offset: 3px; }
+
+    @media (max-width: 960px) {
+      .desktop-nav { display: none; }
+      .menu-btn { display: grid; }
+      .hero { min-height: auto; }
+      .hero-grid, .section-heading, .project-card.featured, .contact-card { grid-template-columns: 1fr; }
+      .section-heading p { justify-self: start; }
+      .experience-card { grid-template-columns: 1fr; gap: 14px; }
+      .skills-grid { grid-template-columns: repeat(2,1fr); }
+      .contact-actions { justify-content: flex-start; }
     }
 
     @media (max-width: 680px) {
-      .container {
-        width: min(calc(100% - 28px), var(--max-width));
-      }
-
-      .nav-wrap {
-        min-height: 64px;
-      }
-
-      .hero {
-        padding-top: 58px;
-      }
-
-      h1 {
-        font-size: clamp(2.7rem, 15vw, 4.5rem);
-      }
-
-      .profile-card {
-        padding: 22px;
-      }
-
-      .section {
-        padding: 64px 0;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-card,
-      .project-card.featured {
-        grid-column: auto;
-      }
-
-      .project-card {
-        padding: 22px;
-      }
-
-      .skills-grid,
-      .panel-stats {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-actions,
-      .project-actions {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .footer-wrap {
-        align-items: flex-start;
-        flex-direction: column;
-      }
+      .container { width: min(calc(100% - 28px),var(--max)); }
+      .nav-wrap { min-height: 64px; }
+      .hero { padding-top: 56px; }
+      h1 { font-size: clamp(2.65rem,15vw,4.4rem); }
+      .quick-stats, .skills-grid, .credential-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card, .project-card.featured { grid-column: auto; }
+      .hero-actions, .project-actions, .contact-actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .footer-wrap { flex-direction: column; align-items: flex-start; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
     }
   </style>
 </head>
@@ -941,26 +222,24 @@
         </a>
 
         <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
           <a href="#skills">Skills</a>
-          <a href="#about">About</a>
+          <a href="#credentials">Credentials</a>
           <a href="#contact">Contact</a>
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
-            <span id="themeIcon" aria-hidden="true">☼</span>
-          </button>
-          <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open navigation">
-            <span aria-hidden="true">☰</span>
-          </button>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme"><span id="themeIcon" aria-hidden="true">☼</span></button>
+          <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open navigation"><span aria-hidden="true">☰</span></button>
         </div>
       </div>
 
       <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
-        <a href="#about">About</a>
+        <a href="#credentials">Credentials</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -970,54 +249,97 @@
     <section class="hero" id="home">
       <div class="container hero-grid">
         <div>
-          <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            Network technology + software development
-          </div>
-          <h1>Building practical systems for <span class="gradient-text">networks, security, and the web.</span></h1>
+          <div class="eyebrow"><span class="eyebrow-dot"></span> IT Support • Networking • Cybersecurity • Development</div>
+          <h1>IT Network Support with a <span class="gradient">builder's mindset.</span></h1>
           <p class="hero-copy">
-            I build Python desktop tools and browser-based applications with a focus on networking,
-            system control, usable interfaces, and maintainable implementation.
+            BS Information Technology graduate specializing in Network Technology, with hands-on IT support experience,
+            cybersecurity training, and practical software development in Python, PyQt6, databases, and web technologies.
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#projects">Explore my projects <span aria-hidden="true">→</span></a>
-            <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">
-              View GitHub profile
-            </a>
+            <a class="btn btn-primary" href="#experience">View IT experience <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">View GitHub</a>
           </div>
 
-          <div class="hero-facts" aria-label="Portfolio highlights">
-            <span><i class="fact-dot"></i> BSIT — Network Technology background</span>
-            <span><i class="fact-dot"></i> Python & PyQt6 development</span>
-            <span><i class="fact-dot"></i> Network security focus</span>
+          <div class="hero-facts">
+            <span><i class="fact-dot"></i> BSIT — Network Technology</span>
+            <span><i class="fact-dot"></i> Academic Achiever — GWA 1.50</span>
+            <span><i class="fact-dot"></i> TESDA CSS NC II</span>
+            <span><i class="fact-dot"></i> 486-hour IT Network Support internship</span>
           </div>
         </div>
 
-        <aside class="profile-card" aria-label="Developer profile">
+        <aside class="profile-card" aria-label="Professional profile">
           <img class="avatar" src="https://avatars.githubusercontent.com/u/206280662?v=4" alt="GitHub avatar for Sachibara">
           <h2>Jim Rodmark Camus</h2>
-          <div class="profile-role">Network & Software Developer</div>
+          <div class="profile-role">IT Network Support • Network Technology • Cybersecurity • Developer</div>
           <p>
-            Developer behind Pyrewall and OmniShare, combining networking concepts with desktop
-            application engineering and front-end development.
+            Focused on IT support, troubleshooting, network operations, Windows administration, cybersecurity,
+            and building practical software tools that solve operational problems.
           </p>
 
-          <div class="profile-list">
-            <div>
-              <strong>Core focus</strong>
-              Network security, monitoring, desktop tools
-            </div>
-            <div>
-              <strong>Primary stack</strong>
-              Python, PyQt6, SQLite, HTML, CSS, JavaScript
-            </div>
-            <div>
-              <strong>GitHub</strong>
-              @Sachibara
-            </div>
+          <div class="quick-stats">
+            <div class="quick-stat"><strong>486 hrs</strong><span>Concentrix IT Network Support</span></div>
+            <div class="quick-stat"><strong>1.50</strong><span>BSIT GWA</span></div>
+            <div class="quick-stat"><strong>CSS NC II</strong><span>Computer Systems Servicing</span></div>
+            <div class="quick-stat"><strong>2+</strong><span>Major IT systems developed</span></div>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">IT experience</div>
+            <h2>Hands-on support and technical operations.</h2>
+          </div>
+          <p>
+            My professional IT experience combines end-user support, network and system troubleshooting,
+            device maintenance, documentation, and application development.
+          </p>
+        </div>
+
+        <div class="experience-grid">
+          <article class="experience-card">
+            <div class="experience-meta">
+              <strong>Feb 2026 — May 2026</strong>
+              486 Hours<br>
+              Nuvali, Sta. Rosa, Laguna
+            </div>
+            <div>
+              <h3>IT Network Support Intern</h3>
+              <div class="company">Concentrix</div>
+              <ul class="bullet-list">
+                <li>Troubleshot network, hardware, and software issues.</li>
+                <li>Assisted users with technical and connectivity concerns.</li>
+                <li>Configured and maintained computer systems and devices.</li>
+                <li>Supported daily IT operations and system maintenance.</li>
+                <li>Documented technical issues and resolutions.</li>
+                <li>Collaborated with IT teams to help maintain smooth operations.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="experience-card">
+            <div class="experience-meta">
+              <strong>2016 — Present</strong>
+              Remote<br>
+              Philippines
+            </div>
+            <div>
+              <h3>Freelance Full-Stack Developer & IT Services</h3>
+              <div class="company">Independent / Freelance</div>
+              <ul class="bullet-list">
+                <li>Provides IT-related technical services and troubleshooting support.</li>
+                <li>Develops software and web-based solutions for practical user needs.</li>
+                <li>Works across front-end, application logic, databases, and system configuration.</li>
+                <li>Applies problem-solving and technical consulting to computer and software-related requirements.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -1025,52 +347,42 @@
       <div class="container">
         <div class="section-heading">
           <div>
-            <div class="section-kicker">Selected repositories</div>
-            <h2>Projects built around real technical problems.</h2>
+            <div class="section-kicker">Featured IT projects</div>
+            <h2>Projects that demonstrate networking and software skills.</h2>
           </div>
           <p>
-            These summaries are based on the actual source currently stored in my GitHub repositories.
-            Public code links are provided where available.
+            PyreWall and StudySync are the core portfolio projects from my CV. Additional GitHub work is included
+            as supporting evidence of front-end and software-development capability.
           </p>
         </div>
 
-        <div class="filters" role="group" aria-label="Filter projects">
-          <button class="filter-btn active" type="button" data-filter="all">All</button>
-          <button class="filter-btn" type="button" data-filter="security">Network Security</button>
-          <button class="filter-btn" type="button" data-filter="web">Web</button>
-        </div>
-
         <div class="projects-grid">
-          <article class="project-card featured" data-category="security">
+          <article class="project-card featured">
             <div>
               <div class="project-top">
                 <span class="project-number">01</span>
-                <span class="status">Capstone Project</span>
+                <span class="status">Flagship Project</span>
               </div>
 
-              <h3>Pyrewall — Next Generation Firewall</h3>
+              <h3>PyreWall — Python-Based Next Generation Firewall</h3>
               <p>
-                A Windows-focused firewall and network monitoring desktop application written in Python
-                with PyQt6. The project combines traffic control, device visibility, domain filtering,
-                rule management, threat views, history, and local persistence.
+                A Windows-focused firewall and network monitoring system built to provide real-time packet inspection,
+                filtering, device visibility, traffic logging, and firewall rule enforcement through a desktop interface.
               </p>
 
-              <ul class="feature-list">
-                <li>Background firewall controller designed to avoid blocking the Qt user interface.</li>
-                <li>Domain and IP filtering with DNS-related handling and firewall rule integration.</li>
-                <li>Connected-device detection and block/unblock controls using ARP and Windows networking tools.</li>
-                <li>SQLite-backed runtime data with packaging-aware database paths for desktop deployment.</li>
-                <li>Tabbed dashboard for overview, network control, threats, rules, history, settings, and administration.</li>
+              <ul class="bullet-list">
+                <li>Real-time packet inspection and network activity monitoring.</li>
+                <li>Website and application filtering controls.</li>
+                <li>Connected-device monitoring and network visibility.</li>
+                <li>Traffic logging and firewall rule enforcement.</li>
+                <li>Python/PyQt6 desktop interface with SQLite persistence.</li>
+                <li>Windows networking and WinDivert integration.</li>
               </ul>
 
-              <div class="tag-list" aria-label="Pyrewall technologies">
-                <span class="tag">Python</span>
-                <span class="tag">PyQt6</span>
-                <span class="tag">SQLite</span>
-                <span class="tag">WinDivert / pydivert</span>
-                <span class="tag">DNS</span>
-                <span class="tag">Windows Firewall</span>
-                <span class="tag">Networking</span>
+              <div class="tag-list" aria-label="PyreWall technologies">
+                <span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">SQLite</span>
+                <span class="tag">WinDivert</span><span class="tag">Windows Firewall</span><span class="tag">Packet Analysis</span>
+                <span class="tag">Network Monitoring</span>
               </div>
 
               <div class="project-actions">
@@ -1080,103 +392,62 @@
             </div>
 
             <div class="project-panel" aria-hidden="true">
-              <div class="mini-terminal">
-                <div><span class="prompt">$</span> pyrewall --profile network-security</div>
-                <br>
-                <div>Firewall engine ........ <span class="prompt">ready</span></div>
-                <div>Device visibility ...... <span class="prompt">enabled</span></div>
-                <div>Domain controls ........ <span class="prompt">enabled</span></div>
-                <div>Rule management ........ <span class="prompt">enabled</span></div>
-                <div>Threat / history UI .... <span class="prompt">enabled</span></div>
-                <br>
-                <div class="muted-line">Desktop security tooling built around Windows networking.</div>
-              </div>
-
-              <div class="panel-stats">
-                <div class="panel-stat">
-                  <strong>Desktop</strong>
-                  <span>PyQt6 interface</span>
-                </div>
-                <div class="panel-stat">
-                  <strong>Local DB</strong>
-                  <span>SQLite persistence</span>
-                </div>
-                <div class="panel-stat">
-                  <strong>Network</strong>
-                  <span>ARP, DNS, IP controls</span>
-                </div>
-                <div class="panel-stat">
-                  <strong>Windows</strong>
-                  <span>Firewall + packet tooling</span>
-                </div>
+              <div class="terminal">
+                <div><span class="ok">$</span> pyrewall --profile network-security</div><br>
+                <div>Packet inspection ...... <span class="ok">enabled</span></div>
+                <div>Website filtering ...... <span class="ok">enabled</span></div>
+                <div>Application filtering .. <span class="ok">enabled</span></div>
+                <div>Device monitoring ...... <span class="ok">enabled</span></div>
+                <div>Traffic logging ........ <span class="ok">enabled</span></div>
+                <div>Firewall controls ...... <span class="ok">enabled</span></div><br>
+                <div class="dim">Network-security tooling built with a desktop-first workflow.</div>
               </div>
             </div>
           </article>
 
-          <article class="project-card" data-category="web">
+          <article class="project-card">
             <div class="project-top">
               <span class="project-number">02</span>
-              <span class="status">Web Prototype</span>
+              <span class="status">Major Project</span>
             </div>
-
-            <h3>OmniShare</h3>
+            <h3>StudySync — LMS & Student Collaboration System</h3>
             <p>
-              A responsive secure-file-sharing interface prototype built as a single-page web application.
-              It supports user flows for file selection, upload simulation, generated file IDs, expiration
-              settings, download lookup, and upload/download history.
+              A student productivity and collaboration system developed with Python, PyQt6, and Supabase,
+              with Gmail integration for notifications and communication.
             </p>
-
-            <ul class="feature-list">
-              <li>Drag-and-drop and browse-based file selection.</li>
-              <li>Configurable file expiration states and file information lookup.</li>
-              <li>Client-side account, history, and state persistence using localStorage.</li>
-              <li>Responsive interface with modal authentication flows and activity statistics.</li>
+            <ul class="bullet-list">
+              <li>Task management and academic organization.</li>
+              <li>Calendar scheduling and student productivity workflows.</li>
+              <li>Group collaboration features.</li>
+              <li>Supabase-backed application data.</li>
+              <li>Gmail integration for email notifications and communication.</li>
             </ul>
-
-            <div class="tag-list" aria-label="OmniShare technologies">
-              <span class="tag">HTML5</span>
-              <span class="tag">CSS3</span>
-              <span class="tag">JavaScript</span>
-              <span class="tag">localStorage</span>
-              <span class="tag">Responsive UI</span>
-            </div>
-
-            <div class="project-actions">
-              <a class="btn btn-primary" href="https://github.com/Sachibara/final_omnishare" target="_blank" rel="noopener noreferrer">View repository</a>
-              <a class="btn btn-secondary" href="https://github.com/Sachibara/final_omnishare/blob/main/index.html" target="_blank" rel="noopener noreferrer">View source</a>
+            <div class="tag-list">
+              <span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">Supabase</span>
+              <span class="tag">Gmail Integration</span><span class="tag">Database Development</span>
             </div>
           </article>
 
-          <article class="project-card" data-category="web">
+          <article class="project-card">
             <div class="project-top">
               <span class="project-number">03</span>
-              <span class="status">Current Site</span>
+              <span class="status">Web Project</span>
             </div>
-
-            <h3>Developer Portfolio</h3>
+            <h3>OmniShare</h3>
             <p>
-              This portfolio is itself a lightweight front-end project: responsive, theme-aware, accessible,
-              and built without a framework so it can be hosted directly from a static GitHub Pages source.
+              A responsive browser-based file-sharing interface prototype demonstrating front-end workflows,
+              file-state handling, local persistence, and responsive interaction design.
             </p>
-
-            <ul class="feature-list">
-              <li>Responsive mobile and desktop navigation.</li>
-              <li>Persistent light/dark theme preference.</li>
-              <li>Interactive project filtering with accessibility-conscious markup.</li>
-              <li>No build pipeline or framework dependency required.</li>
+            <ul class="bullet-list">
+              <li>Drag-and-drop file selection and upload simulation.</li>
+              <li>Generated file IDs and configurable expiration states.</li>
+              <li>Upload/download history and local browser persistence.</li>
             </ul>
-
-            <div class="tag-list" aria-label="Portfolio technologies">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">JavaScript</span>
-              <span class="tag">Accessibility</span>
-              <span class="tag">GitHub Pages Ready</span>
+            <div class="tag-list">
+              <span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">JavaScript</span><span class="tag">localStorage</span>
             </div>
-
             <div class="project-actions">
-              <a class="btn btn-primary" href="#home">View current site</a>
-              <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+              <a class="btn btn-secondary" href="https://github.com/Sachibara/final_omnishare" target="_blank" rel="noopener noreferrer">View repository</a>
             </div>
           </article>
         </div>
@@ -1187,118 +458,88 @@
       <div class="container">
         <div class="section-heading">
           <div>
-            <div class="section-kicker">Technical toolkit</div>
-            <h2>Skills reflected in the repositories.</h2>
+            <div class="section-kicker">Technical skills</div>
+            <h2>IT support first. Development as a force multiplier.</h2>
           </div>
           <p>
-            The emphasis is on practical implementation: networking concepts, desktop application structure,
-            local persistence, and responsive browser interfaces.
+            The skill set below mirrors the technical categories in my CV and is organized around the roles
+            I am targeting in IT support, network support, infrastructure, and technical operations.
           </p>
         </div>
 
         <div class="skills-grid">
           <article class="skill-card">
-            <div class="skill-icon">PY</div>
-            <h3>Python Engineering</h3>
-            <p>Application logic, threading, system integration, network utilities, and modular project structure.</p>
+            <div class="skill-icon">IT</div>
+            <h3>IT Support & Helpdesk</h3>
+            <p>Technical Support, Helpdesk Operations, IT Asset Management, Hardware/Software Troubleshooting, Remote Desktop Support, Technical Documentation.</p>
           </article>
-
           <article class="skill-card">
             <div class="skill-icon">NW</div>
-            <h3>Networking & Security</h3>
-            <p>DNS, IP filtering, ARP-based discovery, firewall controls, traffic handling, and device visibility.</p>
+            <h3>Networking & Infrastructure</h3>
+            <p>Network Troubleshooting & Configuration, System Configuration, Network Monitoring, Traffic Logging, Device Support, System Maintenance.</p>
           </article>
-
           <article class="skill-card">
-            <div class="skill-icon">UI</div>
-            <h3>Desktop UI</h3>
-            <p>PyQt6 dashboards, tabbed workflows, responsive application state, and background worker integration.</p>
+            <div class="skill-icon">WIN</div>
+            <h3>Windows Administration</h3>
+            <p>Windows Administration, Active Directory, User Account Management, Microsoft 365 Administration, OS Installation.</p>
           </article>
-
+          <article class="skill-card">
+            <div class="skill-icon">SEC</div>
+            <h3>Cybersecurity</h3>
+            <p>Firewall Management, Access Control, Packet Analysis, Network Monitoring, Traffic Logging, Vulnerability Assessment.</p>
+          </article>
+          <article class="skill-card">
+            <div class="skill-icon">DEV</div>
+            <h3>Programming</h3>
+            <p>Python, C++, PHP, Java, HTML5, CSS3, JavaScript, Object-Oriented Programming, UI/UX Design.</p>
+          </article>
           <article class="skill-card">
             <div class="skill-icon">DB</div>
-            <h3>SQLite & Persistence</h3>
-            <p>Local databases, schema handling, runtime paths, app history, and packaging-aware storage.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">FE</div>
-            <h3>Front-End Development</h3>
-            <p>Semantic HTML, modern CSS, vanilla JavaScript, responsive layouts, and interactive UI behavior.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">OS</div>
-            <h3>Windows Integration</h3>
-            <p>Windows Firewall commands, ARP tooling, desktop packaging considerations, and system-level workflows.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">UX</div>
-            <h3>Usability</h3>
-            <p>Clear navigation, reusable controls, status feedback, keyboard focus, and mobile-friendly presentation.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">GH</div>
-            <h3>Git & GitHub</h3>
-            <p>Repository-based development, source organization, version history, and static-site delivery workflows.</p>
+            <h3>Data & Development Tools</h3>
+            <p>SQL, MySQL, SQLite, Supabase, REST API Integration, Git/GitHub, Desktop and Mobile Application Development.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="about">
+    <section class="section" id="credentials">
       <div class="container">
         <div class="section-heading">
           <div>
-            <div class="section-kicker">About</div>
-            <h2>Technology built from a networking perspective.</h2>
+            <div class="section-kicker">Education & credentials</div>
+            <h2>Formal IT training backed by hands-on work.</h2>
           </div>
           <p>
-            My project work sits between software development and network technology, with an emphasis on
-            tools that expose, control, or simplify technical systems.
+            Academic performance, technical training, and cybersecurity certifications complement the practical
+            experience shown in my projects and IT support work.
           </p>
         </div>
 
-        <div class="about-grid">
-          <article class="about-card">
-            <h3>Developer profile</h3>
-            <p>
-              I have a <span class="highlight">BSIT Network Technology</span> background and build software that
-              connects user-facing interfaces with networking, operating-system, and data-layer functionality.
-            </p>
-            <p>
-              My strongest portfolio project, Pyrewall, applies this directly through firewall controls,
-              device monitoring, domain filtering, and a desktop administration interface.
-            </p>
+        <div class="credential-grid">
+          <article class="credential-card">
+            <h3>Education & Technical Training</h3>
+            <ul class="credential-list">
+              <li>
+                <strong>BS Information Technology — Network Technology</strong>
+                <span>Pamantasan ng Lungsod ng San Pablo • 2022–2026 • Academic Achiever • GWA 1.50</span>
+              </li>
+              <li>
+                <strong>Computer Systems Servicing NC II</strong>
+                <span>Marcelino Fule Memorial College • 2026</span>
+              </li>
+            </ul>
           </article>
 
-          <div class="timeline" aria-label="Project progression">
-            <div class="timeline-item">
-              <span class="timeline-marker"></span>
-              <div>
-                <h3>Network security application development</h3>
-                <p>Pyrewall combines packet/network controls with a multi-view PyQt6 desktop interface and SQLite persistence.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <span class="timeline-marker"></span>
-              <div>
-                <h3>Web application prototyping</h3>
-                <p>OmniShare demonstrates browser-side interaction design, local state, file workflow simulation, and responsive layouts.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <span class="timeline-marker"></span>
-              <div>
-                <h3>Portfolio engineering</h3>
-                <p>This site packages the work into a fast static portfolio that can be maintained directly from GitHub.</p>
-              </div>
-            </div>
-          </div>
+          <article class="credential-card">
+            <h3>IT & Cybersecurity Certifications</h3>
+            <ul class="credential-list">
+              <li><strong>Computer Systems Servicing NC II (CSS NC II)</strong></li>
+              <li><strong>Ethical Hacking and Data Security</strong></li>
+              <li><strong>Certified Cybersecurity Educator Professional (CCEP)</strong></li>
+              <li><strong>Certified Red Team Operations Management (CRTOM)</strong></li>
+              <li><strong>Certified C++ Practitioner (CCPC)</strong></li>
+            </ul>
+          </article>
         </div>
       </div>
     </section>
@@ -1308,16 +549,16 @@
         <div class="contact-card">
           <div>
             <div class="section-kicker">Contact</div>
-            <h2>Interested in my work?</h2>
+            <h2>Open to IT and network-support opportunities.</h2>
             <p>
-              The best public contact point for this portfolio is my GitHub profile, where you can review
-              repositories and development activity.
+              I am interested in roles involving IT support, helpdesk operations, network support, infrastructure,
+              Windows administration, cybersecurity, and technical application development.
             </p>
           </div>
-
-          <a class="btn btn-primary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">
-            Open GitHub profile <span aria-hidden="true">↗</span>
-          </a>
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="mailto:markcamus06@gmail.com">Email me</a>
+            <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+          </div>
         </div>
       </div>
     </section>
@@ -1325,7 +566,7 @@
 
   <footer>
     <div class="container footer-wrap">
-      <div>© <span id="year"></span> Jim Rodmark Camus. Built as a lightweight static portfolio.</div>
+      <div>© <span id="year"></span> Jim Rodmark Camus • IT Network Support & Technology Portfolio</div>
       <div class="footer-links">
         <a href="#home">Top</a>
         <a href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -1342,56 +583,36 @@
       var themeIcon = document.getElementById("themeIcon");
       var menuToggle = document.getElementById("menuToggle");
       var mobileNav = document.getElementById("mobileNav");
-      var filterButtons = document.querySelectorAll(".filter-btn");
-      var projectCards = document.querySelectorAll(".project-card");
 
-      function getPreferredTheme() {
+      function preferredTheme() {
         var saved = localStorage.getItem("portfolio-theme");
         if (saved === "light" || saved === "dark") return saved;
         return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
       }
 
-      function applyTheme(theme) {
+      function setTheme(theme) {
         root.setAttribute("data-theme", theme);
         themeIcon.textContent = theme === "dark" ? "☼" : "☾";
         themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
         localStorage.setItem("portfolio-theme", theme);
       }
 
-      applyTheme(getPreferredTheme());
+      setTheme(preferredTheme());
 
       themeToggle.addEventListener("click", function () {
-        var current = root.getAttribute("data-theme");
-        applyTheme(current === "dark" ? "light" : "dark");
+        setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
       });
 
       menuToggle.addEventListener("click", function () {
-        var isOpen = mobileNav.classList.toggle("open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+        var open = mobileNav.classList.toggle("open");
+        menuToggle.setAttribute("aria-expanded", String(open));
+        menuToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
       });
 
       mobileNav.querySelectorAll("a").forEach(function (link) {
         link.addEventListener("click", function () {
           mobileNav.classList.remove("open");
           menuToggle.setAttribute("aria-expanded", "false");
-          menuToggle.setAttribute("aria-label", "Open navigation");
-        });
-      });
-
-      filterButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-          var filter = button.getAttribute("data-filter");
-
-          filterButtons.forEach(function (item) {
-            item.classList.toggle("active", item === button);
-          });
-
-          projectCards.forEach(function (card) {
-            var category = card.getAttribute("data-category");
-            var show = filter === "all" || category === filter;
-            card.classList.toggle("hidden", !show);
-          });
         });
       });
 
