@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional developer portfolio for Jim Rodmark Camus, featuring network security, Python desktop applications, and web projects.">
+  <meta name="theme-color" content="#08111f">
+  <title>Jim Rodmark Camus | Network & Software Developer</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0c1727;
+      --surface: rgba(18, 31, 49, 0.82);
+      --surface-solid: #111f31;
+      --surface-2: #17283e;
+      --text: #eef5ff;
+      --muted: #94a9c2;
+      --border: rgba(155, 184, 218, 0.18);
+      --accent: #65d8ff;
+      --accent-2: #78f0ba;
+      --accent-soft: rgba(101, 216, 255, 0.12);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      --header: rgba(7, 17, 31, 0.78);
+      --max-width: 1180px;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f6f9fd;
+      --bg-soft: #edf3fa;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-solid: #ffffff;
+      --surface-2: #edf4fb;
+      --text: #122238;
+      --muted: #5b6f86;
+      --border: rgba(35, 66, 100, 0.14);
+      --accent: #087ea4;
+      --accent-2: #0a8f64;
+      --accent-soft: rgba(8, 126, 164, 0.09);
+      --shadow: 0 22px 60px rgba(45, 72, 105, 0.12);
+      --header: rgba(246, 249, 253, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(101, 216, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 88% 12%, rgba(120, 240, 186, 0.1), transparent 24%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.26;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      transform: translateY(-160%);
+      padding: 10px 14px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 10px;
+      z-index: 999;
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: var(--header);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-wrap {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(101, 216, 255, 0.2);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .desktop-nav a {
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a:focus-visible {
+      background: var(--accent-soft);
+      color: var(--text);
+      outline: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(101, 216, 255, 0.45);
+    }
+
+    .menu-btn {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: none;
+      padding: 0 0 16px;
+    }
+
+    .mobile-nav.open {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mobile-nav a {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    main section {
+      scroll-margin-top: 90px;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      align-items: center;
+      padding: 76px 0 60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 5px rgba(120, 240, 186, 0.11);
+    }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(3rem, 7.2vw, 6.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 18px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #06111e;
+      border-color: transparent;
+      box-shadow: 0 14px 34px rgba(101, 216, 255, 0.18);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .hero-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 26px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-facts span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fact-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .profile-card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent), var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% auto auto 55%;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: rgba(101, 216, 255, 0.16);
+      filter: blur(40px);
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-card h2 {
+      font-size: 1.45rem;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-role {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-card p {
+      color: var(--muted);
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-list div {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border);
+    }
+
+    .profile-list strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .section {
+      padding: 84px 0;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 10px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      max-width: 520px;
+      justify-self: end;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: var(--text);
+      background: var(--accent-soft);
+      border-color: rgba(101, 216, 255, 0.4);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .project-card {
+      grid-column: span 6;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 26px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 15px 42px rgba(0,0,0,0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(101, 216, 255, 0.38);
+      box-shadow: var(--shadow);
+    }
+
+    .project-card.featured {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .project-card.hidden {
+      display: none;
+    }
+
+    .project-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .project-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 900;
+      border: 1px solid var(--border);
+    }
+
+    .status {
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .project-card h3 {
+      font-size: 1.55rem;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin: 4px 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .feature-list li::before {
+      content: "↗";
+      color: var(--accent-2);
+      font-weight: 900;
+      margin-top: 1px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: auto;
+    }
+
+    .tag {
+      padding: 6px 9px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.025);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .project-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .project-panel {
+      min-height: 100%;
+      padding: 22px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(101,216,255,0.08), rgba(120,240,186,0.04)),
+        var(--surface-2);
+      border: 1px solid var(--border);
+      display: grid;
+      align-content: space-between;
+      gap: 24px;
+    }
+
+    .mini-terminal {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      color: #bdeeff;
+      padding: 18px;
+      border-radius: 14px;
+      background: #07111f;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: auto;
+    }
+
+    .mini-terminal .prompt {
+      color: #78f0ba;
+    }
+
+    .mini-terminal .muted-line {
+      color: #6f89a4;
+    }
+
+    .panel-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .panel-stat {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .panel-stat strong {
+      display: block;
+      font-size: 1.25rem;
+      color: var(--text);
+    }
+
+    .panel-stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .skill-card {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .skill-card h3 {
+      font-size: 1rem;
+      margin-bottom: 9px;
+    }
+
+    .skill-card p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .skill-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-weight: 900;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 30px;
+    }
+
+    .about-card,
+    .timeline {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--surface);
+      padding: 26px;
+    }
+
+    .about-card p {
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .about-card .highlight {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .timeline-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 7px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
+
+    .timeline-item h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .contact-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 30px;
+      padding: 34px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(101,216,255,0.08), rgba(120,240,186,0.06)), var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-card h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+    }
+
+    .contact-card p {
+      color: var(--muted);
+      max-width: 720px;
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(101, 216, 255, 0.55);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 940px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .menu-btn {
+        display: grid;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-grid,
+      .section-heading,
+      .about-grid,
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading p {
+        justify-self: start;
+      }
+
+      .project-card.featured {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-card {
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .container {
+        width: min(calc(100% - 28px), var(--max-width));
+      }
+
+      .nav-wrap {
+        min-height: 64px;
+      }
+
+      .hero {
+        padding-top: 58px;
+      }
+
+      h1 {
+        font-size: clamp(2.7rem, 15vw, 4.5rem);
+      }
+
+      .profile-card {
+        padding: 22px;
+      }
+
+      .section {
+        padding: 64px 0;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card,
+      .project-card.featured {
+        grid-column: auto;
+      }
+
+      .project-card {
+        padding: 22px;
+      }
+
+      .skills-grid,
+      .panel-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions,
+      .project-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .footer-wrap {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-wrap">
+        <a class="brand" href="#home" aria-label="Go to home">
+          <span class="brand-mark">JC</span>
+          <span>Jim Rodmark Camus</span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+            <span id="themeIcon" aria-hidden="true">☼</span>
+          </button>
+          <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open navigation">
+            <span aria-hidden="true">☰</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Network technology + software development
+          </div>
+          <h1>Building practical systems for <span class="gradient-text">networks, security, and the web.</span></h1>
+          <p class="hero-copy">
+            I build Python desktop tools and browser-based applications with a focus on networking,
+            system control, usable interfaces, and maintainable implementation.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Explore my projects <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">
+              View GitHub profile
+            </a>
+          </div>
+
+          <div class="hero-facts" aria-label="Portfolio highlights">
+            <span><i class="fact-dot"></i> BSIT — Network Technology background</span>
+            <span><i class="fact-dot"></i> Python & PyQt6 development</span>
+            <span><i class="fact-dot"></i> Network security focus</span>
+          </div>
+        </div>
+
+        <aside class="profile-card" aria-label="Developer profile">
+          <img class="avatar" src="https://avatars.githubusercontent.com/u/206280662?v=4" alt="GitHub avatar for Sachibara">
+          <h2>Jim Rodmark Camus</h2>
+          <div class="profile-role">Network & Software Developer</div>
+          <p>
+            Developer behind Pyrewall and OmniShare, combining networking concepts with desktop
+            application engineering and front-end development.
+          </p>
+
+          <div class="profile-list">
+            <div>
+              <strong>Core focus</strong>
+              Network security, monitoring, desktop tools
+            </div>
+            <div>
+              <strong>Primary stack</strong>
+              Python, PyQt6, SQLite, HTML, CSS, JavaScript
+            </div>
+            <div>
+              <strong>GitHub</strong>
+              @Sachibara
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Selected repositories</div>
+            <h2>Projects built around real technical problems.</h2>
+          </div>
+          <p>
+            These summaries are based on the actual source currently stored in my GitHub repositories.
+            Public code links are provided where available.
+          </p>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter projects">
+          <button class="filter-btn active" type="button" data-filter="all">All</button>
+          <button class="filter-btn" type="button" data-filter="security">Network Security</button>
+          <button class="filter-btn" type="button" data-filter="web">Web</button>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card featured" data-category="security">
+            <div>
+              <div class="project-top">
+                <span class="project-number">01</span>
+                <span class="status">Capstone Project</span>
+              </div>
+
+              <h3>Pyrewall — Next Generation Firewall</h3>
+              <p>
+                A Windows-focused firewall and network monitoring desktop application written in Python
+                with PyQt6. The project combines traffic control, device visibility, domain filtering,
+                rule management, threat views, history, and local persistence.
+              </p>
+
+              <ul class="feature-list">
+                <li>Background firewall controller designed to avoid blocking the Qt user interface.</li>
+                <li>Domain and IP filtering with DNS-related handling and firewall rule integration.</li>
+                <li>Connected-device detection and block/unblock controls using ARP and Windows networking tools.</li>
+                <li>SQLite-backed runtime data with packaging-aware database paths for desktop deployment.</li>
+                <li>Tabbed dashboard for overview, network control, threats, rules, history, settings, and administration.</li>
+              </ul>
+
+              <div class="tag-list" aria-label="Pyrewall technologies">
+                <span class="tag">Python</span>
+                <span class="tag">PyQt6</span>
+                <span class="tag">SQLite</span>
+                <span class="tag">WinDivert / pydivert</span>
+                <span class="tag">DNS</span>
+                <span class="tag">Windows Firewall</span>
+                <span class="tag">Networking</span>
+              </div>
+
+              <div class="project-actions">
+                <a class="btn btn-primary" href="https://github.com/Sachibara/Pyrewall" target="_blank" rel="noopener noreferrer">View repository</a>
+                <a class="btn btn-secondary" href="https://github.com/Sachibara/Pyrewall/blob/main/core/firewall_thread.py" target="_blank" rel="noopener noreferrer">Inspect firewall core</a>
+              </div>
+            </div>
+
+            <div class="project-panel" aria-hidden="true">
+              <div class="mini-terminal">
+                <div><span class="prompt">$</span> pyrewall --profile network-security</div>
+                <br>
+                <div>Firewall engine ........ <span class="prompt">ready</span></div>
+                <div>Device visibility ...... <span class="prompt">enabled</span></div>
+                <div>Domain controls ........ <span class="prompt">enabled</span></div>
+                <div>Rule management ........ <span class="prompt">enabled</span></div>
+                <div>Threat / history UI .... <span class="prompt">enabled</span></div>
+                <br>
+                <div class="muted-line">Desktop security tooling built around Windows networking.</div>
+              </div>
+
+              <div class="panel-stats">
+                <div class="panel-stat">
+                  <strong>Desktop</strong>
+                  <span>PyQt6 interface</span>
+                </div>
+                <div class="panel-stat">
+                  <strong>Local DB</strong>
+                  <span>SQLite persistence</span>
+                </div>
+                <div class="panel-stat">
+                  <strong>Network</strong>
+                  <span>ARP, DNS, IP controls</span>
+                </div>
+                <div class="panel-stat">
+                  <strong>Windows</strong>
+                  <span>Firewall + packet tooling</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="web">
+            <div class="project-top">
+              <span class="project-number">02</span>
+              <span class="status">Web Prototype</span>
+            </div>
+
+            <h3>OmniShare</h3>
+            <p>
+              A responsive secure-file-sharing interface prototype built as a single-page web application.
+              It supports user flows for file selection, upload simulation, generated file IDs, expiration
+              settings, download lookup, and upload/download history.
+            </p>
+
+            <ul class="feature-list">
+              <li>Drag-and-drop and browse-based file selection.</li>
+              <li>Configurable file expiration states and file information lookup.</li>
+              <li>Client-side account, history, and state persistence using localStorage.</li>
+              <li>Responsive interface with modal authentication flows and activity statistics.</li>
+            </ul>
+
+            <div class="tag-list" aria-label="OmniShare technologies">
+              <span class="tag">HTML5</span>
+              <span class="tag">CSS3</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">localStorage</span>
+              <span class="tag">Responsive UI</span>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-primary" href="https://github.com/Sachibara/final_omnishare" target="_blank" rel="noopener noreferrer">View repository</a>
+              <a class="btn btn-secondary" href="https://github.com/Sachibara/final_omnishare/blob/main/index.html" target="_blank" rel="noopener noreferrer">View source</a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="web">
+            <div class="project-top">
+              <span class="project-number">03</span>
+              <span class="status">Current Site</span>
+            </div>
+
+            <h3>Developer Portfolio</h3>
+            <p>
+              This portfolio is itself a lightweight front-end project: responsive, theme-aware, accessible,
+              and built without a framework so it can be hosted directly from a static GitHub Pages source.
+            </p>
+
+            <ul class="feature-list">
+              <li>Responsive mobile and desktop navigation.</li>
+              <li>Persistent light/dark theme preference.</li>
+              <li>Interactive project filtering with accessibility-conscious markup.</li>
+              <li>No build pipeline or framework dependency required.</li>
+            </ul>
+
+            <div class="tag-list" aria-label="Portfolio technologies">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">Accessibility</span>
+              <span class="tag">GitHub Pages Ready</span>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-primary" href="#home">View current site</a>
+              <a class="btn btn-secondary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Technical toolkit</div>
+            <h2>Skills reflected in the repositories.</h2>
+          </div>
+          <p>
+            The emphasis is on practical implementation: networking concepts, desktop application structure,
+            local persistence, and responsive browser interfaces.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-card">
+            <div class="skill-icon">PY</div>
+            <h3>Python Engineering</h3>
+            <p>Application logic, threading, system integration, network utilities, and modular project structure.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">NW</div>
+            <h3>Networking & Security</h3>
+            <p>DNS, IP filtering, ARP-based discovery, firewall controls, traffic handling, and device visibility.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">UI</div>
+            <h3>Desktop UI</h3>
+            <p>PyQt6 dashboards, tabbed workflows, responsive application state, and background worker integration.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">DB</div>
+            <h3>SQLite & Persistence</h3>
+            <p>Local databases, schema handling, runtime paths, app history, and packaging-aware storage.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">FE</div>
+            <h3>Front-End Development</h3>
+            <p>Semantic HTML, modern CSS, vanilla JavaScript, responsive layouts, and interactive UI behavior.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">OS</div>
+            <h3>Windows Integration</h3>
+            <p>Windows Firewall commands, ARP tooling, desktop packaging considerations, and system-level workflows.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">UX</div>
+            <h3>Usability</h3>
+            <p>Clear navigation, reusable controls, status feedback, keyboard focus, and mobile-friendly presentation.</p>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">GH</div>
+            <h3>Git & GitHub</h3>
+            <p>Repository-based development, source organization, version history, and static-site delivery workflows.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">About</div>
+            <h2>Technology built from a networking perspective.</h2>
+          </div>
+          <p>
+            My project work sits between software development and network technology, with an emphasis on
+            tools that expose, control, or simplify technical systems.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <article class="about-card">
+            <h3>Developer profile</h3>
+            <p>
+              I have a <span class="highlight">BSIT Network Technology</span> background and build software that
+              connects user-facing interfaces with networking, operating-system, and data-layer functionality.
+            </p>
+            <p>
+              My strongest portfolio project, Pyrewall, applies this directly through firewall controls,
+              device monitoring, domain filtering, and a desktop administration interface.
+            </p>
+          </article>
+
+          <div class="timeline" aria-label="Project progression">
+            <div class="timeline-item">
+              <span class="timeline-marker"></span>
+              <div>
+                <h3>Network security application development</h3>
+                <p>Pyrewall combines packet/network controls with a multi-view PyQt6 desktop interface and SQLite persistence.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <span class="timeline-marker"></span>
+              <div>
+                <h3>Web application prototyping</h3>
+                <p>OmniShare demonstrates browser-side interaction design, local state, file workflow simulation, and responsive layouts.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <span class="timeline-marker"></span>
+              <div>
+                <h3>Portfolio engineering</h3>
+                <p>This site packages the work into a fast static portfolio that can be maintained directly from GitHub.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-card">
+          <div>
+            <div class="section-kicker">Contact</div>
+            <h2>Interested in my work?</h2>
+            <p>
+              The best public contact point for this portfolio is my GitHub profile, where you can review
+              repositories and development activity.
+            </p>
+          </div>
+
+          <a class="btn btn-primary" href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">
+            Open GitHub profile <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>© <span id="year"></span> Jim Rodmark Camus. Built as a lightweight static portfolio.</div>
+      <div class="footer-links">
+        <a href="#home">Top</a>
+        <a href="https://github.com/Sachibara" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var root = document.documentElement;
+      var themeToggle = document.getElementById("themeToggle");
+      var themeIcon = document.getElementById("themeIcon");
+      var menuToggle = document.getElementById("menuToggle");
+      var mobileNav = document.getElementById("mobileNav");
+      var filterButtons = document.querySelectorAll(".filter-btn");
+      var projectCards = document.querySelectorAll(".project-card");
+
+      function getPreferredTheme() {
+        var saved = localStorage.getItem("portfolio-theme");
+        if (saved === "light" || saved === "dark") return saved;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        themeIcon.textContent = theme === "dark" ? "☼" : "☾";
+        themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+        localStorage.setItem("portfolio-theme", theme);
+      }
+
+      applyTheme(getPreferredTheme());
+
+      themeToggle.addEventListener("click", function () {
+        var current = root.getAttribute("data-theme");
+        applyTheme(current === "dark" ? "light" : "dark");
+      });
+
+      menuToggle.addEventListener("click", function () {
+        var isOpen = mobileNav.classList.toggle("open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+      });
+
+      mobileNav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          mobileNav.classList.remove("open");
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.setAttribute("aria-label", "Open navigation");
+        });
+      });
+
+      filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var filter = button.getAttribute("data-filter");
+
+          filterButtons.forEach(function (item) {
+            item.classList.toggle("active", item === button);
+          });
+
+          projectCards.forEach(function (card) {
+            var category = card.getAttribute("data-category");
+            var show = filter === "all" || category === filter;
+            card.classList.toggle("hidden", !show);
+          });
+        });
+      });
+
+      document.getElementById("year").textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
