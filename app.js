@@ -293,7 +293,7 @@
   function preferredTheme() {
     const saved = localStorage.getItem(THEME_KEY);
     if (saved === "light" || saved === "dark") return saved;
-    return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    return "light";
   }
 
   function setSelectedFile(file) {
