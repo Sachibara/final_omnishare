@@ -4,6 +4,11 @@ OmniShare is a local-first file storage and sharing workspace built with HTML, C
 
 The current version replaces the original simulated upload/download prototype with a functional browser-based file engine. Files are stored as real binary data in IndexedDB and can be retrieved, downloaded, shared through supported native browser APIs, expired, searched, and deleted.
 
+
+## Live Website
+
+**Live app:** https://finalomnishare.vercel.app
+
 ## What Works
 
 - Real file storage using IndexedDB
