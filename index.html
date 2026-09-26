@@ -86,8 +86,8 @@
               <p class="section-kicker">Secure cloud workspace</p>
               <h2>Upload once, retrieve securely from any device.</h2>
               <p>
-                OmniShare now stores the actual file data in IndexedDB, not just fake metadata.
-                Upload a file, receive a secure ID, and download it again from this browser at any time until it expires.
+                OmniShare stores the actual file in a private cloud bucket and protects its metadata with row-level security.
+                Upload a file, receive a secure ID, and retrieve it securely from another device until it expires.
               </p>
               <div class="hero-actions">
                 <button class="primary-btn large" type="button" data-go="upload">Upload a file</button>
@@ -110,7 +110,7 @@
             <article class="stat-card">
               <div class="stat-label">Storage used</div>
               <div class="stat-value" id="storageUsedStat">0 B</div>
-              <div class="stat-detail" id="storageQuotaDetail">Checking browser quota…</div>
+              <div class="stat-detail" id="storageQuotaDetail">Sign in to view cloud usage</div>
             </article>
             <article class="stat-card">
               <div class="stat-label">Downloads</div>
@@ -153,8 +153,8 @@
               <div class="info-box">
                 <strong>How OmniShare works</strong>
                 <p>
-                  In local mode, share IDs work only in this browser profile because there is no cloud database yet.
-                  Use the Share button to send the actual file through your device's native sharing tools when supported.
+                  A recipient only needs the secure OmniShare ID to retrieve the file from another browser or device.
+                  Signed download links expire quickly, while the underlying Storage bucket remains private.
                 </p>
               </div>
             </article>
@@ -166,7 +166,7 @@
             <div>
               <p class="section-kicker">Add a file</p>
               <h2>Upload to your private OmniShare cloud vault</h2>
-              <p>Maximum single-file size: <strong>100 MB</strong>. Actual capacity depends on browser storage quota.</p>
+              <p>Maximum single-file size: <strong>100 MB</strong>. Overall availability depends on the cloud project's storage and bandwidth limits.</p>
             </div>
           </div>
 
@@ -357,6 +357,7 @@
     </article>
   </template>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0"></script>\n  <script src="cloud-app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0"></script>
+  <script src="cloud-app.js" defer></script>
 </body>
 </html>
