@@ -1958,3 +1958,21 @@ html[data-theme="dark"] .icon-button{background:var(--panel-2)}
   .stat-card:nth-child(n){transform:none}
   .hero-panel h2{font-size:2.45rem}
 }
+
+
+/* OmniShare cloud authentication */
+.auth-dialog .auth-card{width:min(520px,calc(100vw - 28px))}
+.auth-tabs{display:flex;gap:8px;margin:4px 0 18px}
+.auth-tabs .active{background:var(--accent,#ff7a59);color:#111}
+.auth-form{display:grid;gap:12px}
+.auth-form .field{display:grid;gap:6px}
+.auth-form .field span{font-size:.78rem;font-weight:800}
+.auth-message{margin:16px 0 0;padding:12px;border:1px solid var(--border,#d9d0c7);border-radius:10px;font-size:.83rem;line-height:1.5}
+.auth-message.error{border-color:#d65a5a;color:#b12f2f;background:rgba(214,90,90,.08)}
+.retrieve-file{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:8px}
+.retrieve-file-info h3{margin:0 0 6px}
+.retrieve-file-info code{display:block;margin-bottom:8px}
+.retrieve-file-info p{margin:0 0 10px;color:var(--muted)}
+.retrieve-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem}
+.compact-empty{padding:22px 10px}
+@media(max-width:700px){.retrieve-file{grid-template-columns:auto 1fr}.retrieve-file>.primary-btn{grid-column:1/-1;width:100%}}
