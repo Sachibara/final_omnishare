@@ -4,7 +4,10 @@
   const SUPABASE_URL = "https://taizmxigaeyrxtvnnzbw.supabase.co";
   const SUPABASE_KEY = "sb_publishable_EmCXMq9_SNjG-ISf6_9v7Q_iHZsLz29";
   const BUCKET = "omnishare-files";
-  const MAX_FILE_SIZE = 100 * 1024 * 1024;
+  const CURRENT_MAX_FILE_SIZE = 50 * 1024 * 1024;
+  const DESIGNED_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024;
+  const RESUMABLE_THRESHOLD = 6 * 1024 * 1024;
+  const TUS_ENDPOINT = "https://taizmxigaeyrxtvnnzbw.storage.supabase.co/storage/v1/upload/resumable";
   const THEME_KEY = "omnishare-theme";
   const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
@@ -225,8 +228,12 @@
       return;
     }
 
-    if (file.size > MAX_FILE_SIZE) {
-      toast("File is too large", "Maximum file size is 100 MB.", "error");
+    if (file.size > CURRENT_MAX_FILE_SIZE) {
+      toast(
+        "Current backend limit reached",
+        "This Supabase Free project currently allows up to 50 MB per file. OmniShare is already designed for files up to 5 GB once the Storage plan/global limit is increased.",
+        "warning"
+      );
       return;
     }
 
@@ -400,24 +407,112 @@
     if (result.error) console.warn("Activity log failed:", result.error.message);
   }
 
+  async function storagePathForFile(file) {
+    const source = [
+      state.user.id,
+      file.name,
+      file.size,
+      file.lastModified || 0,
+      file.type || "application/octet-stream"
+    ].join("|");
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source));
+    const hex = Array.from(new Uint8Array(digest), function (byte) {
+      return byte.toString(16).padStart(2, "0");
+    }).join("");
+    return state.user.id + "/uploads/" + hex.slice(0, 32) + "-" + safeName(file.name);
+  }
+
+  async function uploadWithTus(path, file) {
+    if (!window.tus || !window.tus.Upload) {
+      throw new Error("Resumable upload engine could not load. Refresh the page and try again.");
+    }
+
+    const sessionResult = await client.auth.getSession();
+    const session = sessionResult.data && sessionResult.data.session;
+    if (!session || !session.access_token) {
+      throw new Error("Your session expired. Sign in again before uploading.");
+    }
+
+    return new Promise(function (resolve, reject) {
+      const upload = new window.tus.Upload(file, {
+        endpoint: TUS_ENDPOINT,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        headers: {
+          authorization: "Bearer " + session.access_token,
+          apikey: SUPABASE_KEY,
+          "x-upsert": "false"
+        },
+        uploadDataDuringCreation: true,
+        removeFingerprintOnSuccess: true,
+        chunkSize: 6 * 1024 * 1024,
+        metadata: {
+          bucketName: BUCKET,
+          objectName: path,
+          contentType: file.type || "application/octet-stream",
+          cacheControl: "3600"
+        },
+        onError: function (error) {
+          reject(error);
+        },
+        onProgress: function (bytesUploaded, bytesTotal) {
+          const percentage = bytesTotal ? Math.round((bytesUploaded / bytesTotal) * 100) : 0;
+          setProgress(15 + Math.round(percentage * 0.5), "Uploading " + percentage + "% • resumable");
+        },
+        onSuccess: function () {
+          resolve();
+        }
+      });
+
+      upload.findPreviousUploads()
+        .then(function (previousUploads) {
+          if (previousUploads.length) {
+            upload.resumeFromPreviousUpload(previousUploads[0]);
+            toast("Upload resumed", "Continuing from the last successfully uploaded chunk.");
+          }
+          upload.start();
+        })
+        .catch(reject);
+    });
+  }
+
+  async function uploadToStorage(path, file) {
+    if (file.size > RESUMABLE_THRESHOLD) {
+      return uploadWithTus(path, file);
+    }
+
+    const upload = await client.storage.from(BUCKET).upload(path, file, {
+      cacheControl: "3600",
+      contentType: file.type || "application/octet-stream",
+      upsert: false
+    });
+    if (upload.error) throw upload.error;
+  }
+
   async function uploadSelected() {
     if (!state.selectedFile) return;
     if (!requireAuth()) return;
 
     const file = state.selectedFile;
-    const path = state.user.id + "/" + crypto.randomUUID() + "-" + safeName(file.name);
+    const path = await storagePathForFile(file);
+    const existing = state.files.find(function (item) {
+      return item.storagePath === path && !isExpired(item);
+    });
+    if (existing) {
+      toast("Already uploaded", "This exact file is already available as " + existing.shareId + ".", "warning");
+      return;
+    }
 
     el("saveFileBtn").disabled = true;
     el("uploadProgressWrap").classList.remove("hidden");
     setProgress(15, "Connecting to private cloud storage…");
 
     try {
-      const upload = await client.storage.from(BUCKET).upload(path, file, {
-        cacheControl: "3600",
-        contentType: file.type || "application/octet-stream",
-        upsert: false
-      });
-      if (upload.error) throw upload.error;
+      if (file.size > RESUMABLE_THRESHOLD) {
+        setProgress(15, "Preparing resumable upload…");
+      } else {
+        setProgress(15, "Uploading securely…");
+      }
+      await uploadToStorage(path, file);
 
       setProgress(65, "Creating secure OmniShare ID…");
 
@@ -525,8 +620,17 @@
               '<span><b>Expires</b> ' + escapeHtml(file.expiresAt ? formatDate(file.expiresAt) : "No expiry") + '</span>' +
             '</div>' +
           '</div>' +
-          '<button class="primary-btn" id="publicDownloadBtn" type="button">Download file</button>' +
+          '<div class="retrieve-actions">' +
+            (previewKind(file) ? '<button class="secondary-btn" id="publicPreviewBtn" type="button">Preview</button>' : '') +
+            '<button class="primary-btn" id="publicDownloadBtn" type="button">Download file</button>' +
+          '</div>' +
         '</div>';
+
+      if (el("publicPreviewBtn")) {
+        el("publicPreviewBtn").addEventListener("click", function () {
+          openPreview(file);
+        });
+      }
 
       el("publicDownloadBtn").addEventListener("click", async function () {
         try {
@@ -564,7 +668,7 @@
     el("expiringStat").textContent = state.user ? soon : "—";
     el("storageQuotaDetail").textContent = state.user ? "Private cloud storage used by your files" : "Sign in to view cloud usage";
     el("storageUsedLabel").textContent = state.user ? formatBytes(total) + " stored" : "Sign in to view storage";
-    el("storageQuotaLabel").textContent = "100 MB maximum per file";
+    el("storageQuotaLabel").textContent = "Current Free backend: 50 MB/file • app architecture ready for 5 GB";
     el("storageFill").style.width = Math.min(100, total / (1024 * 1024 * 1024) * 100) + "%";
 
     const list = el("recentFilesList");
@@ -634,6 +738,11 @@
       card.querySelector(".file-card-date").textContent = formatDate(file.createdAt);
       card.querySelector(".file-card-expiry").textContent = file.expiresAt ? formatDate(file.expiresAt) : "Never";
       card.querySelector(".download-action").disabled = isExpired(file);
+      const previewButton = card.querySelector(".preview-action");
+      if (previewButton) {
+        previewButton.disabled = isExpired(file) || !previewKind(file);
+        previewButton.title = previewKind(file) ? "Open secure inline preview" : "No inline preview for this file type";
+      }
       grid.appendChild(card);
     });
 
@@ -749,6 +858,90 @@
     renderActivity();
   }
 
+  function previewKind(file) {
+    const type = String(file.type || "").toLowerCase();
+    const ext = String(file.name || "").split(".").pop().toLowerCase();
+
+    if (type.startsWith("image/")) return "image";
+    if (type.startsWith("video/")) return "video";
+    if (type.startsWith("audio/")) return "audio";
+    if (type === "application/pdf" || ext === "pdf") return "pdf";
+    if (
+      type.startsWith("text/") ||
+      ["txt","md","json","csv","xml","js","ts","css","py","java","c","cpp","h","log","yaml","yml"].includes(ext)
+    ) return "text";
+    return null;
+  }
+
+  function ensurePreviewDialog() {
+    if (el("previewDialog")) return;
+    const dialog = document.createElement("dialog");
+    dialog.id = "previewDialog";
+    dialog.className = "share-dialog preview-dialog";
+    dialog.innerHTML =
+      '<div class="dialog-card preview-card">' +
+        '<div class="dialog-heading">' +
+          '<div><p class="section-kicker">Secure preview</p><h2 id="previewTitle">Preview</h2></div>' +
+          '<button class="icon-button" id="previewCloseBtn" type="button" aria-label="Close preview">×</button>' +
+        '</div>' +
+        '<div class="preview-stage" id="previewStage"></div>' +
+        '<p class="dialog-note">Preview links are temporary and the underlying storage bucket remains private.</p>' +
+      '</div>';
+    document.body.appendChild(dialog);
+    el("previewCloseBtn").addEventListener("click", function () {
+      dialog.close();
+    });
+    dialog.addEventListener("close", function () {
+      el("previewStage").innerHTML = "";
+    });
+  }
+
+  async function openPreview(file) {
+    const kind = previewKind(file);
+    if (!kind) {
+      toast("Preview unavailable", "This file type can be downloaded but does not have an inline browser preview.", "warning");
+      return;
+    }
+
+    ensurePreviewDialog();
+    el("previewTitle").textContent = file.name;
+    const stage = el("previewStage");
+    stage.innerHTML = '<div class="empty-state"><div class="empty-icon">⌕</div><h3>Preparing secure preview…</h3></div>';
+    el("previewDialog").showModal();
+
+    try {
+      const payload = await publicLookup(file.shareId, "preview");
+      const url = payload.signedUrl;
+
+      if (kind === "image") {
+        stage.innerHTML = '<img class="preview-image" alt="">';
+        stage.querySelector("img").src = url;
+        stage.querySelector("img").alt = file.name;
+      } else if (kind === "video") {
+        stage.innerHTML = '<video class="preview-video" controls preload="metadata"></video>';
+        stage.querySelector("video").src = url;
+      } else if (kind === "audio") {
+        stage.innerHTML = '<div class="preview-audio-wrap"><div class="file-type-icon">AUDIO</div><audio class="preview-audio" controls></audio></div>';
+        stage.querySelector("audio").src = url;
+      } else if (kind === "pdf") {
+        stage.innerHTML = '<iframe class="preview-pdf" title="PDF preview"></iframe>';
+        stage.querySelector("iframe").src = url;
+      } else if (kind === "text") {
+        if (Number(file.size || 0) > 2 * 1024 * 1024) {
+          stage.innerHTML = '<div class="empty-state"><h3>Text preview limited to 2 MB</h3><p>Download the file to view the complete content.</p></div>';
+          return;
+        }
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Text preview could not be loaded.");
+        const textContent = await response.text();
+        stage.innerHTML = '<pre class="preview-text"></pre>';
+        stage.querySelector("pre").textContent = textContent;
+      }
+    } catch (error) {
+      stage.innerHTML = '<div class="empty-state"><div class="empty-icon">!</div><h3>Preview unavailable</h3><p>' + escapeHtml(error.message || "The preview could not be loaded.") + '</p></div>';
+    }
+  }
+
   function bindEvents() {
     all("[data-view]").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -820,7 +1013,8 @@
       if (!file) return;
 
       try {
-        if (event.target.closest(".download-action")) await downloadOwn(file);
+        if (event.target.closest(".preview-action")) await openPreview(file);
+        else if (event.target.closest(".download-action")) await downloadOwn(file);
         else if (event.target.closest(".copy-action")) await copyText(file.shareId, "File ID copied");
         else if (event.target.closest(".share-action")) await shareFile(file);
         else if (event.target.closest(".delete-action")) await deleteFile(file);
