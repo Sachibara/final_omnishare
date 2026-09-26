@@ -9,11 +9,7 @@ const corsHeaders = {
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
-      ...corsHeaders,
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store",
-    },
+    headers: { ...corsHeaders, "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 }
 
@@ -27,6 +23,7 @@ Deno.serve(async (req: Request) => {
       .trim()
       .toUpperCase()
       .replace(/\s+/g, "");
+    const action = body?.action === "download" ? "download" : "info";
 
     if (!/^OMNI-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/.test(shareId)) {
       return json({ error: "Invalid OmniShare ID." }, 400);
@@ -56,6 +53,22 @@ Deno.serve(async (req: Request) => {
       return json({ error: "This file has expired." }, 410);
     }
 
+    const publicFile = {
+      id: file.id,
+      shareId: file.share_id,
+      name: file.original_name,
+      size: file.size_bytes,
+      type: file.mime_type,
+      note: file.note,
+      createdAt: file.created_at,
+      expiresAt: file.expires_at,
+      downloadCount: Number(file.download_count || 0),
+    };
+
+    if (action === "info") {
+      return json({ file: publicFile });
+    }
+
     const { data: signed, error: signedError } = await admin.storage
       .from("omnishare-files")
       .createSignedUrl(file.storage_path, 120, { download: true });
@@ -68,10 +81,7 @@ Deno.serve(async (req: Request) => {
 
     await admin
       .from("omnishare_files")
-      .update({
-        download_count: nextCount,
-        last_downloaded_at: new Date().toISOString(),
-      })
+      .update({ download_count: nextCount, last_downloaded_at: new Date().toISOString() })
       .eq("id", file.id);
 
     await admin.from("omnishare_activity").insert({
@@ -84,24 +94,12 @@ Deno.serve(async (req: Request) => {
     });
 
     return json({
-      file: {
-        id: file.id,
-        shareId: file.share_id,
-        name: file.original_name,
-        size: file.size_bytes,
-        type: file.mime_type,
-        note: file.note,
-        createdAt: file.created_at,
-        expiresAt: file.expires_at,
-        downloadCount: nextCount,
-      },
+      file: { ...publicFile, downloadCount: nextCount },
       signedUrl: signed.signedUrl,
       validForSeconds: 120,
     });
   } catch (error) {
     console.error("omnishare-retrieve", error);
-    return json({
-      error: error instanceof Error ? error.message : "Unexpected server error.",
-    }, 500);
+    return json({ error: error instanceof Error ? error.message : "Unexpected server error." }, 500);
   }
 });
