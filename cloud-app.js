@@ -465,7 +465,7 @@
     }
   }
 
-  async function publicLookup(shareId) {
+  async function publicLookup(shareId, action) {
     const id = normalizeId(shareId);
     const response = await fetch(SUPABASE_URL + "/functions/v1/omnishare-retrieve", {
       method: "POST",
@@ -473,7 +473,7 @@
         "Content-Type": "application/json",
         "apikey": SUPABASE_KEY
       },
-      body: JSON.stringify({ shareId: id })
+      body: JSON.stringify({ shareId: id, action: action || "info" })
     });
 
     const payload = await response.json().catch(function () {
@@ -521,8 +521,13 @@
           '<button class="primary-btn" id="publicDownloadBtn" type="button">Download file</button>' +
         '</div>';
 
-      el("publicDownloadBtn").addEventListener("click", function () {
-        startSignedDownload(payload.signedUrl);
+      el("publicDownloadBtn").addEventListener("click", async function () {
+        try {
+          const download = await publicLookup(file.shareId, "download");
+          startSignedDownload(download.signedUrl);
+        } catch (error) {
+          toast("Download failed", error.message || "The file could not be downloaded.", "error");
+        }
       });
     } catch (error) {
       box.className = "retrieve-result empty-state";
@@ -531,7 +536,7 @@
   }
 
   async function downloadOwn(file) {
-    const payload = await publicLookup(file.shareId);
+    const payload = await publicLookup(file.shareId, "download");
     startSignedDownload(payload.signedUrl);
     await Promise.all([loadFiles(), loadActivity()]);
     renderDashboard();
