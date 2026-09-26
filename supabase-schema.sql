@@ -62,6 +62,7 @@ create table if not exists public.omnishare_activity (
 );
 
 create index if not exists omnishare_activity_owner_idx on public.omnishare_activity(owner_id);
+create index if not exists omnishare_activity_file_idx on public.omnishare_activity(file_id);
 create index if not exists omnishare_activity_created_idx on public.omnishare_activity(created_at desc);
 
 alter table public.omnishare_activity enable row level security;
