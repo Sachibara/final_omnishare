@@ -166,7 +166,7 @@
             <div>
               <p class="section-kicker">Add a file</p>
               <h2>Upload to your private OmniShare cloud vault</h2>
-              <p>Maximum single-file size: <strong>100 MB</strong>. Overall availability depends on the cloud project's storage and bandwidth limits.</p>
+              <p>Current Supabase Free backend limit: <strong>50 MB per file</strong>. OmniShare now uses resumable uploads and is architected for multi-GB files once the Storage plan/global limit is increased.</p>
             </div>
           </div>
 
@@ -177,7 +177,7 @@
                 <div class="drop-icon">↑</div>
                 <h3>Drop a file here</h3>
                 <p>or click to browse your device</p>
-                <span>Any file type • up to 100 MB</span>
+                <span>Any file type • current backend limit 50 MB • resumable uploads</span>
               </div>
 
               <div class="selected-file hidden" id="selectedFileCard">
@@ -349,6 +349,7 @@
         </dl>
       </div>
       <div class="file-card-actions">
+        <button class="secondary-btn compact preview-action" type="button">Preview</button>
         <button class="secondary-btn compact download-action" type="button">Download</button>
         <button class="ghost-btn compact copy-action" type="button">Copy ID</button>
         <button class="ghost-btn compact share-action" type="button">Share</button>
@@ -358,6 +359,7 @@
   </template>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/dist/tus.min.js"></script>
   <script src="cloud-app.js" defer></script>
 </body>
 </html>
