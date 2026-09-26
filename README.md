@@ -39,6 +39,14 @@ Authenticated users can access only their own metadata and Storage paths through
 
 The share ID therefore acts as a capability link: treat it as private and only send it to intended recipients.
 
+## Repository Layout
+
+- `index.html` — application interface
+- `styles.css` — responsive UI and authentication/retrieval styles
+- `cloud-app.js` — production Supabase cloud engine
+- `supabase-schema.sql` — reproducible database and Storage policies
+- `supabase/functions/omnishare-retrieve/` — public retrieval Edge Function source
+
 ## Backend Objects
 
 - `public.omnishare_files`
