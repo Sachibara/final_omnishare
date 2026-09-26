@@ -13,12 +13,14 @@ OmniShare is a secure cloud file-sharing application built with HTML, CSS, vanil
 - Private Supabase Storage bucket: `omnishare-files`
 - Row Level Security (RLS) so users can manage only their own files and activity
 - Public cross-device retrieval through the `omnishare-retrieve` Edge Function
-- Short-lived signed download URLs; the Storage bucket itself is not public
+- Short-lived signed download URLs and one-hour signed preview URLs; the Storage bucket itself is not public
 - Vercel for the web frontend
 
 ## What Works
 
-- Real cloud file uploads up to 100 MB per file
+- TUS resumable uploads for files above 6 MB with automatic retry and resume support
+- Application/database architecture prepared for files up to 5 GB
+- Current connected Supabase Free project is still limited by Supabase to 50 MB per file; Pro and above can configure much larger global limits
 - Cross-device retrieval using secure IDs such as `OMNI-A1B2-C3D4`
 - Recipient downloads without requiring an account
 - Email/password account creation and sign-in for upload/library access
@@ -29,6 +31,7 @@ OmniShare is a secure cloud file-sharing application built with HTML, CSS, vanil
 - Search and sorting
 - Delete and clear-expired workflows
 - Shareable retrieval links
+- Secure inline previews for images, video, audio, PDF, and common text/code files
 - Responsive light/dark interface
 
 ## Security Model
