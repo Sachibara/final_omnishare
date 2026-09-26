@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="OmniShare — a local-first, privacy-focused file sharing workspace with real browser storage and downloads.">
+  <meta name="description" content="OmniShare — secure cloud file sharing with cross-device retrieval, private storage, and shareable OmniShare IDs.">
   <meta name="theme-color" content="#fff9f4">
-  <title>OmniShare — Local-first File Sharing</title>
+  <title>OmniShare — Secure Cloud File Sharing</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
         <div class="brand-mark" aria-hidden="true">O</div>
         <div>
           <strong>OmniShare</strong>
-          <span>Local-first workspace</span>
+          <span>Secure cloud workspace</span>
         </div>
       </div>
 
@@ -47,8 +47,8 @@
       <div class="sidebar-note">
         <div class="note-dot"></div>
         <div>
-          <strong>Private by default</strong>
-          <p>Files stay in this browser until you delete them.</p>
+          <strong>Private cloud storage</strong>
+          <p>Files stay private until someone receives the secure OmniShare ID.</p>
         </div>
       </div>
 
@@ -71,9 +71,9 @@
         </div>
 
         <div class="topbar-actions">
-          <div class="status-pill" title="Files are stored in this browser">
+          <div class="status-pill" id="cloudStatus" title="Files are stored in a private Supabase bucket">
             <span class="status-dot"></span>
-            Local mode
+            Cloud ready
           </div>
           <button class="primary-btn" type="button" data-go="upload">Upload file</button>
         </div>
@@ -83,8 +83,8 @@
         <section class="view active" id="dashboardView" data-view-panel="dashboard">
           <div class="hero-panel">
             <div>
-              <p class="section-kicker">Secure local workspace</p>
-              <h2>Store, retrieve, and manage files with real browser storage.</h2>
+              <p class="section-kicker">Secure cloud workspace</p>
+              <h2>Upload once, retrieve securely from any device.</h2>
               <p>
                 OmniShare now stores the actual file data in IndexedDB, not just fake metadata.
                 Upload a file, receive a secure ID, and download it again from this browser at any time until it expires.
@@ -105,7 +105,7 @@
             <article class="stat-card">
               <div class="stat-label">Stored files</div>
               <div class="stat-value" id="storedFilesStat">0</div>
-              <div class="stat-detail">Available in this browser</div>
+              <div class="stat-detail">Stored in your cloud library</div>
             </article>
             <article class="stat-card">
               <div class="stat-label">Storage used</div>
@@ -115,7 +115,7 @@
             <article class="stat-card">
               <div class="stat-label">Downloads</div>
               <div class="stat-value" id="downloadsStat">0</div>
-              <div class="stat-detail">Successful local downloads</div>
+              <div class="stat-detail">Successful shared downloads</div>
             </article>
             <article class="stat-card">
               <div class="stat-label">Expiring soon</div>
@@ -140,7 +140,7 @@
               <div class="panel-heading">
                 <div>
                   <p class="section-kicker">Storage health</p>
-                  <h3>Browser storage</h3>
+                  <h3>Cloud storage</h3>
                 </div>
               </div>
               <div class="storage-meter">
@@ -165,7 +165,7 @@
           <div class="content-header">
             <div>
               <p class="section-kicker">Add a file</p>
-              <h2>Upload to your local OmniShare vault</h2>
+              <h2>Upload to your private OmniShare cloud vault</h2>
               <p>Maximum single-file size: <strong>100 MB</strong>. Actual capacity depends on browser storage quota.</p>
             </div>
           </div>
@@ -220,14 +220,14 @@
             </article>
 
             <aside class="panel tips-panel">
-              <p class="section-kicker">What changed</p>
-              <h3>Real storage, real downloads</h3>
+              <p class="section-kicker">Cloud sharing</p>
+              <h3>Private storage, cross-device downloads</h3>
               <ul class="feature-list">
-                <li>The selected file is stored as a real Blob in IndexedDB.</li>
+                <li>Files are stored in a private Supabase Storage bucket.</li>
                 <li>IDs are generated with the browser cryptography API.</li>
                 <li>Expired files cannot be downloaded.</li>
-                <li>Files persist across page refreshes in this browser.</li>
-                <li>You can delete data permanently from the Library.</li>
+                <li>Recipients can retrieve files across devices without signing in.</li>
+                <li>Your library is protected by Supabase Auth and row-level security.</li>
               </ul>
             </aside>
           </div>
@@ -238,7 +238,7 @@
             <div>
               <p class="section-kicker">Retrieve a file</p>
               <h2>Download using an OmniShare ID</h2>
-              <p>Enter an ID created by this browser, such as <code>OMNI-A1B2-C3D4</code>.</p>
+              <p>Enter any valid shared OmniShare ID, such as <code>OMNI-A1B2-C3D4</code>. No account is required to receive a file.</p>
             </div>
           </div>
 
@@ -263,8 +263,8 @@
           <div class="content-header split">
             <div>
               <p class="section-kicker">Stored files</p>
-              <h2>Your local library</h2>
-              <p>Manage files stored by OmniShare in this browser.</p>
+              <h2>Your cloud library</h2>
+              <p>Manage files stored securely under your OmniShare account.</p>
             </div>
             <button class="primary-btn" type="button" data-go="upload">Add file</button>
           </div>
@@ -291,7 +291,7 @@
             <div>
               <p class="section-kicker">Audit trail</p>
               <h2>Recent activity</h2>
-              <p>Uploads, downloads, shares, and deletions recorded on this device.</p>
+              <p>Uploads, downloads, shares, and deletions recorded for your account.</p>
             </div>
             <button class="secondary-btn" id="clearActivityBtn" type="button">Clear activity</button>
           </div>
@@ -322,7 +322,7 @@
       </div>
 
       <p class="dialog-note">
-        This ID retrieves the file from this browser profile. For cross-device sharing, use the Share file button when your browser supports native file sharing.
+        This ID can retrieve the file from another device until it expires. Share the ID or secure retrieval link with the intended recipient.
       </p>
 
       <div class="dialog-actions">
@@ -357,6 +357,6 @@
     </article>
   </template>
 
-  <script src="app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0"></script>\n  <script src="app.js" defer></script>
 </body>
 </html>
