@@ -88,12 +88,19 @@
   }
 
   function normalizeId(value) {
-    return String(value || "")
+    let raw = String(value || "")
       .trim()
       .toUpperCase()
       .replace(/\s+/g, "")
-      .replace(/^OMNI:?/, "OMNI-")
-      .replace(/[^A-Z0-9-]/g, "");
+      .replace(/[^A-Z0-9:-]/g, "");
+
+    raw = raw.replace(/^OMNI[:\-]*/, "").replace(/-/g, "");
+
+    if (/^[A-HJ-NP-Z2-9]{8}$/.test(raw)) {
+      return "OMNI-" + raw.slice(0, 4) + "-" + raw.slice(4);
+    }
+
+    return String(value || "").trim().toUpperCase();
   }
 
   function randomSegment() {
