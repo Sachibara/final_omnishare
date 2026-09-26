@@ -7,7 +7,7 @@ create table if not exists public.omnishare_files (
   owner_id uuid not null references auth.users(id) on delete cascade,
   storage_path text not null unique,
   original_name text not null,
-  size_bytes bigint not null check (size_bytes >= 0 and size_bytes <= 104857600),
+  size_bytes bigint not null check (size_bytes >= 0 and size_bytes <= 5368709120),
   mime_type text not null default 'application/octet-stream',
   note text,
   created_at timestamptz not null default now(),
@@ -90,10 +90,10 @@ grant select, insert, delete on table public.omnishare_activity to authenticated
 grant usage, select on sequence public.omnishare_activity_id_seq to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit)
-values ('omnishare-files', 'omnishare-files', false, 104857600)
+values ('omnishare-files', 'omnishare-files', false, null)
 on conflict (id) do update
 set public = false,
-    file_size_limit = 104857600;
+    file_size_limit = null;
 
 drop policy if exists "omnishare authenticated upload own path" on storage.objects;
 create policy "omnishare authenticated upload own path"
