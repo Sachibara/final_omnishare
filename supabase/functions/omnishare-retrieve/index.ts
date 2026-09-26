@@ -23,7 +23,10 @@ Deno.serve(async (req: Request) => {
       .trim()
       .toUpperCase()
       .replace(/\s+/g, "");
-    const action = body?.action === "download" ? "download" : "info";
+    const action =
+      body?.action === "download" ? "download" :
+      body?.action === "preview" ? "preview" :
+      "info";
 
     if (!/^OMNI-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/.test(shareId)) {
       return json({ error: "Invalid OmniShare ID." }, 400);
@@ -67,6 +70,22 @@ Deno.serve(async (req: Request) => {
 
     if (action === "info") {
       return json({ file: publicFile });
+    }
+
+    if (action === "preview") {
+      const { data: preview, error: previewError } = await admin.storage
+        .from("omnishare-files")
+        .createSignedUrl(file.storage_path, 3600);
+
+      if (previewError || !preview?.signedUrl) {
+        throw previewError || new Error("Unable to create preview URL.");
+      }
+
+      return json({
+        file: publicFile,
+        signedUrl: preview.signedUrl,
+        validForSeconds: 3600,
+      });
     }
 
     const { data: signed, error: signedError } = await admin.storage
